@@ -1,4 +1,4 @@
-package com.atesliuk.investing_simulator.repository;
+package com.atesliuk.investing_simulator;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
