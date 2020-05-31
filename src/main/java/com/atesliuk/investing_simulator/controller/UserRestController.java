@@ -1,18 +1,17 @@
 package com.atesliuk.investing_simulator.controller;
 
+import com.atesliuk.investing_simulator.controller.exceptions.UserNotFoundException;
 import com.atesliuk.investing_simulator.domain.User;
 import com.atesliuk.investing_simulator.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
 public class UserRestController {
 
+    @Autowired
     private UserService userService;
-
-    public UserRestController(UserService userService) {
-        this.userService = userService;
-    }
 
     @GetMapping(value = "/users")
     public Iterable<User> getAllUsers(){
@@ -21,7 +20,9 @@ public class UserRestController {
 
     @GetMapping(value = "/users/{userId}")
     public User getUser(@PathVariable Long userId){
-        return userService.getUser(userId);
+        User theUser = userService.getUser(userId);
+        if (theUser==null) throw new UserNotFoundException("User id not found - "+userId);
+        return theUser;
     }
 
     @PostMapping(value = "/users")
@@ -32,18 +33,16 @@ public class UserRestController {
 
     @PutMapping(value = "/users")
     public User updateUser(@RequestBody User user){
-        userService.saveUser(user);
-        return user;
+        return userService.saveUser(user);
     }
 
     @DeleteMapping(value = "/users/{userId}")
     public String deleteUser(@PathVariable Long userId){
         User tempUser = userService.getUser(userId);
-        if (userId == null){
+        if (tempUser == null){
             //throw new CustomerNotFoundException("Customer id not found - "+customerId);
             return "Error. User with id "+userId+" was not found.";
         }
-
         userService.deleteUser(tempUser);
         return "Deleted customer id - " + userId;
     }

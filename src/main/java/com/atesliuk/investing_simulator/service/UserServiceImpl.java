@@ -2,6 +2,7 @@ package com.atesliuk.investing_simulator.service;
 
 import com.atesliuk.investing_simulator.domain.User;
 import com.atesliuk.investing_simulator.repository.UserDAO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -9,12 +10,8 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService{
 
+    @Autowired
     private UserDAO userDAO;
-
-    public UserServiceImpl(UserDAO userDAO) {
-        this.userDAO = userDAO;
-    }
-
 
     @Override
     public Iterable<User> getAllUsers() {
@@ -35,7 +32,6 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void deleteUser(User user) {
-
         userDAO.delete(user);
     }
 }
