@@ -1,0 +1,15 @@
+--
+-- Creating a new user called 'admin'
+--
+
+CREATE USER 'admin'@'localhost' IDENTIFIED BY 'admin';
+GRANT ALL PRIVILEGES ON * . * TO 'admin'@'localhost';
+FLUSH PRIVILEGES;
+
+--
+-- Creating a database called 'investing_simulator'
+--
+
+DROP DATABASE  IF EXISTS `investing_simulator`;
+CREATE DATABASE  IF NOT EXISTS `investing_simulator`;
+USE `investing_simulator`;
