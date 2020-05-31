@@ -33,24 +33,26 @@ public class Portfolio {
 
     private List<Deal> tradingHistory;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.DETACH,
+    @OneToMany(mappedBy = "portfolio",cascade = {CascadeType.PERSIST, CascadeType.DETACH,
             CascadeType.MERGE, CascadeType.REFRESH})
-    @JoinColumn(name = "portfolio_id")
     private List<Stock> stocks;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.DETACH,
+    @OneToMany(mappedBy = "portfolio", cascade = {CascadeType.PERSIST, CascadeType.DETACH,
             CascadeType.MERGE, CascadeType.REFRESH})
-    @JoinColumn(name = "portfolio_id")
     private List<Deal> deals;
 
     public Portfolio() {
     }
 
-    public Portfolio(String name, LocalDate dateOfCreation, Long initialInvestment, Long freeCash) {
+    public Portfolio(String name, LocalDate dateOfCreation, Long initialInvestment, Long freeCash, User user, List<Deal> tradingHistory, List<Stock> stocks, List<Deal> deals) {
         this.name = name;
         this.dateOfCreation = dateOfCreation;
         this.initialInvestment = initialInvestment;
         this.freeCash = freeCash;
+        this.user = user;
+        this.tradingHistory = tradingHistory;
+        this.stocks = stocks;
+        this.deals = deals;
     }
 
     public Long getId() {
@@ -115,6 +117,14 @@ public class Portfolio {
 
     public void setStocks(List<Stock> stocks) {
         this.stocks = stocks;
+    }
+
+    public List<Deal> getDeals() {
+        return deals;
+    }
+
+    public void setDeals(List<Deal> deals) {
+        this.deals = deals;
     }
 
     public void addStock(Stock theStock){

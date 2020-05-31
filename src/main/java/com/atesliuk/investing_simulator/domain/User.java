@@ -29,11 +29,12 @@ public class User {
             CascadeType.MERGE, CascadeType.REFRESH})
     private List<Portfolio> portfolios;
 
-    public User(String email, String firstName, String lastName, String password) {
+    public User(String email, String firstName, String lastName, String password, List<Portfolio> portfolios) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
+        this.portfolios = portfolios;
     }
 
     public User(){

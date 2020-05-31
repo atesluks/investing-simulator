@@ -49,4 +49,6 @@ public class Stock {
     public void setPortfolio(Portfolio portfolio) {
         this.portfolio = portfolio;
     }
+
+
 }

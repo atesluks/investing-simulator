@@ -38,12 +38,13 @@ public class Deal implements Comparable{
     public Deal() {
     }
 
-    public Deal(String action, String ticker, Integer amount, LocalDate date, Long profit) {
+    public Deal(String action, String ticker, Integer amount, LocalDate date, Long profit, Portfolio portfolio) {
         this.action = action;
         this.ticker = ticker;
         this.amount = amount;
         this.date = date;
         this.profit = profit;
+        this.portfolio = portfolio;
     }
 
     public Long getId() {
@@ -110,4 +111,5 @@ public class Deal implements Comparable{
         }
         return 0;
     }
+
 }
