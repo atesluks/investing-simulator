@@ -6,6 +6,11 @@ import javax.persistence.*;
 @Table(name = "stocks")
 public class Stock {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+
     @Column(name = "amount")
     private Long amount;
 
