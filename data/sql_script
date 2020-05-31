@@ -25,13 +25,15 @@ CREATE TABLE `users` (
   `password` char(68) NOT NULL,
   `first_name` varchar(50) NOT NULL,
   `last_name` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email_UNIQUE` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Creating a table called 'portfolio'
 --
 
+DROP TABLE IF EXISTS `portfolio`;
 CREATE TABLE `portfolio` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
@@ -45,4 +47,40 @@ CREATE TABLE `portfolio` (
   CONSTRAINT `FK_USER`
   FOREIGN KEY(`user_id`)
   REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Creating a table called 'stocks'
+--
+
+DROP TABLE IF EXISTS `stocks`;
+CREATE TABLE `stocks` (
+  `amount` int(12) NOT NULL,
+  `ticker` varchar(10) NOT NULL,
+  `portfolio_id` int(11) DEFAULT NULL,
+  KEY `FK_PORTFOLIO_idx` (`portfolio_id`),
+  CONSTRAINT `FK_PORTFOLIO`
+  FOREIGN KEY(`portfolio_id`)
+  REFERENCES `portfolio` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Creating a table called 'deal'
+--
+
+DROP TABLE IF EXISTS `deal`;
+CREATE TABLE `deal` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `action` varchar(4) NOT NULL,
+  `ticker` varchar(10) NOT NULL,
+  `stock_price` DECIMAL(12,2) NOT NULL,
+  `amount` int(12) NOT NULL,
+  `date` DATETIME NOT NULL,
+  `profit` DECIMAL(12,2) DEFAULT NULL,
+  `portfolio_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_PORTFOLIO_idx` (`portfolio_id`),
+  CONSTRAINT `FK_PORTFOLIO_FOR_DEAL`
+  FOREIGN KEY(`portfolio_id`)
+  REFERENCES `portfolio` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

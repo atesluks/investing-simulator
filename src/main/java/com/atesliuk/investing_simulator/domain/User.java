@@ -1,6 +1,8 @@
 package com.atesliuk.investing_simulator.domain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -23,7 +25,9 @@ public class User {
     @Column(name = "password")
     private String password;
 
-
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.DETACH,
+            CascadeType.MERGE, CascadeType.REFRESH})
+    private List<Portfolio> portfolios;
 
     public User(String email, String firstName, String lastName, String password) {
         this.email = email;
@@ -76,6 +80,14 @@ public class User {
         return password;
     }
 
+    public List<Portfolio> getPortfolios() {
+        return portfolios;
+    }
+
+    public void setPortfolios(List<Portfolio> portfolios) {
+        this.portfolios = portfolios;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -86,4 +98,13 @@ public class User {
                 ", password='" + password + '\'' +
                 '}';
     }
+
+    public void addPortfolio(Portfolio portfolio){
+        if (portfolios == null){
+            portfolios = new ArrayList<Portfolio>();
+        }
+        portfolios.add(portfolio);
+        portfolio.setUser(this) ;
+    }
+
 }
