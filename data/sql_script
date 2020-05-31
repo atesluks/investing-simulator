@@ -27,3 +27,22 @@ CREATE TABLE `users` (
   `last_name` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Creating a table called 'portfolio'
+--
+
+CREATE TABLE `portfolio` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  `date_of_creation` DATETIME NOT NULL,
+  `initial_investment` DECIMAL(12,2) NOT NULL,
+  `free_cash` DECIMAL(12,2) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `NAME_UNIQUE` (`name`),
+  KEY `FK_USER_idx` (`user_id`),
+  CONSTRAINT `FK_USER`
+  FOREIGN KEY(`user_id`)
+  REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
