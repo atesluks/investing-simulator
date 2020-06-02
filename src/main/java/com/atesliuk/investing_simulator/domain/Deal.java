@@ -1,5 +1,9 @@
 package com.atesliuk.investing_simulator.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -7,8 +11,8 @@ import java.time.LocalDate;
 @Table(name = "deal")
 public class Deal implements Comparable{
 
-    public final String ACTION_BUY="BUY";
-    public final String ACTION_SELL="SELL";
+    public static final String ACTION_BUY="BUY";
+    public static final String ACTION_SELL="SELL";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,6 +34,8 @@ public class Deal implements Comparable{
     @Column(name = "profit")
     private Long profit;
 
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH,
             CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "portfolio_id")

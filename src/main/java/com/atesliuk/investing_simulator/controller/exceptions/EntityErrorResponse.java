@@ -1,16 +1,16 @@
 package com.atesliuk.investing_simulator.controller.exceptions;
 
-public class UserErrorResponse {
+public class EntityErrorResponse {
 
     private int status;
     private String message;
     private long timeStamp;
 
-    public UserErrorResponse(){
+    public EntityErrorResponse(){
 
     }
 
-    public UserErrorResponse(int status, String message, long timeStamp) {
+    public EntityErrorResponse(int status, String message, long timeStamp) {
         this.status = status;
         this.message = message;
         this.timeStamp = timeStamp;

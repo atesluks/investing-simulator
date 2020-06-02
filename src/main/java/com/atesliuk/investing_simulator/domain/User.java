@@ -1,5 +1,9 @@
 package com.atesliuk.investing_simulator.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +29,8 @@ public class User {
     @Column(name = "password")
     private String password;
 
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.DETACH,
             CascadeType.MERGE, CascadeType.REFRESH})
     private List<Portfolio> portfolios;
@@ -101,8 +107,9 @@ public class User {
     }
 
     public void addPortfolio(Portfolio portfolio){
+        if (portfolios==null) throw new NullPointerException("Portfolio can't be null in Customer.addPortfolio() !");
         if (portfolios == null){
-            portfolios = new ArrayList<Portfolio>();
+            portfolios = new ArrayList<>();
         }
         portfolios.add(portfolio);
         portfolio.setUser(this) ;

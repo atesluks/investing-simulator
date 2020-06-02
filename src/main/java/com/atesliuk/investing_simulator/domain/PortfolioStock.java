@@ -1,10 +1,14 @@
 package com.atesliuk.investing_simulator.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "stocks")
-public class Stock {
+public class PortfolioStock {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,15 +21,17 @@ public class Stock {
     @Column(name = "ticker")
     private String ticker;
 
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH,
             CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio;
 
-    public Stock() {
+    public PortfolioStock() {
     }
 
-    public Stock(Long amount, String ticker, Portfolio portfolio) {
+    public PortfolioStock(Long amount, String ticker, Portfolio portfolio) {
         this.amount = amount;
         this.ticker = ticker;
         this.portfolio = portfolio;
@@ -55,5 +61,11 @@ public class Stock {
         this.portfolio = portfolio;
     }
 
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

@@ -1,5 +1,9 @@
 package com.atesliuk.investing_simulator.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -23,22 +27,27 @@ public class Portfolio {
     @Column(name = "initial_investment")
     private Long initialInvestment;
 
-    @Column(name = "free_cash")
-    private Long freeCash;
-
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH,
             CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "user_id")
     private User user;
 
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(mappedBy = "portfolio", cascade = {CascadeType.PERSIST, CascadeType.DETACH,
             CascadeType.MERGE, CascadeType.REFRESH})
     private List<Deal> tradingHistory;
 
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(mappedBy = "portfolio",cascade = {CascadeType.PERSIST, CascadeType.DETACH,
             CascadeType.MERGE, CascadeType.REFRESH})
-    private List<Stock> stocks;
+    private List<PortfolioStock> portfolioStocks;
 
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(mappedBy = "portfolio", cascade = {CascadeType.PERSIST, CascadeType.DETACH,
             CascadeType.MERGE, CascadeType.REFRESH})
     private List<Deal> deals;
@@ -46,14 +55,13 @@ public class Portfolio {
     public Portfolio() {
     }
 
-    public Portfolio(String name, LocalDate dateOfCreation, Long initialInvestment, Long freeCash, User user, List<Deal> tradingHistory, List<Stock> stocks, List<Deal> deals) {
+    public Portfolio(String name, LocalDate dateOfCreation, Long initialInvestment, User user, List<Deal> tradingHistory, List<PortfolioStock> portfolioStocks, List<Deal> deals) {
         this.name = name;
         this.dateOfCreation = dateOfCreation;
         this.initialInvestment = initialInvestment;
-        this.freeCash = freeCash;
         this.user = user;
         this.tradingHistory = tradingHistory;
-        this.stocks = stocks;
+        this.portfolioStocks = portfolioStocks;
         this.deals = deals;
     }
 
@@ -89,14 +97,6 @@ public class Portfolio {
         this.initialInvestment = initialInvestment;
     }
 
-    public Long getFreeCash() {
-        return freeCash;
-    }
-
-    public void setFreeCash(Long freeCash) {
-        this.freeCash = freeCash;
-    }
-
     public User getUser() {
         return user;
     }
@@ -113,12 +113,12 @@ public class Portfolio {
         this.tradingHistory = tradingHistory;
     }
 
-    public List<Stock> getStocks() {
-        return stocks;
+    public List<PortfolioStock> getPortfolioStocks() {
+        return portfolioStocks;
     }
 
-    public void setStocks(List<Stock> stocks) {
-        this.stocks = stocks;
+    public void setPortfolioStocks(List<PortfolioStock> portfolioStocks) {
+        this.portfolioStocks = portfolioStocks;
     }
 
     public List<Deal> getDeals() {
@@ -129,11 +129,11 @@ public class Portfolio {
         this.deals = deals;
     }
 
-    public void addStock(Stock theStock){
-        if (stocks==null){
-            stocks = new ArrayList<>();
+    public void addStock(PortfolioStock thePortfolioStock){
+        if (portfolioStocks ==null){
+            portfolioStocks = new ArrayList<>();
         }
-        stocks.add(theStock);
+        portfolioStocks.add(thePortfolioStock);
     }
 
     public void addDeal(Deal theDeal){

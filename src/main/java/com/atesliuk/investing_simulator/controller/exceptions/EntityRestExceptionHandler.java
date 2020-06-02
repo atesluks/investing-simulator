@@ -6,12 +6,12 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
-public class UserRestExceptionHandler {
+public class EntityRestExceptionHandler {
 
     @ExceptionHandler
-    public ResponseEntity<UserErrorResponse> handleException(UserNotFoundException exc){
+    public ResponseEntity<EntityErrorResponse> handleException(EntityNotFoundException exc){
 
-        UserErrorResponse error = new UserErrorResponse(
+        EntityErrorResponse error = new EntityErrorResponse(
                 HttpStatus.NOT_FOUND.value(),
                 exc.getMessage(),
                 System.currentTimeMillis());
@@ -22,9 +22,9 @@ public class UserRestExceptionHandler {
 
     //catches all exceptions
     @ExceptionHandler
-    public ResponseEntity<UserErrorResponse> handleException(Exception exc){
+    public ResponseEntity<EntityErrorResponse> handleException(Exception exc){
 
-        UserErrorResponse error = new UserErrorResponse(
+        EntityErrorResponse error = new EntityErrorResponse(
                 HttpStatus.BAD_REQUEST.value(),
                 exc.getMessage(),
                 System.currentTimeMillis());

@@ -39,7 +39,6 @@ CREATE TABLE `portfolios` (
   `name` varchar(50) NOT NULL,
   `date_of_creation` DATETIME NOT NULL,
   `initial_investment` DECIMAL(12,2) NOT NULL,
-  `free_cash` DECIMAL(12,2) NOT NULL,
   `user_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `NAME_UNIQUE` (`name`),
