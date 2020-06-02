@@ -36,12 +36,6 @@ public class Portfolio {
 
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @JsonIdentityReference(alwaysAsId = true)
-    @OneToMany(mappedBy = "portfolio", cascade = {CascadeType.PERSIST, CascadeType.DETACH,
-            CascadeType.MERGE, CascadeType.REFRESH})
-    private List<Deal> tradingHistory;
-
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-    @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(mappedBy = "portfolio",cascade = {CascadeType.PERSIST, CascadeType.DETACH,
             CascadeType.MERGE, CascadeType.REFRESH})
     private List<PortfolioStock> portfolioStocks;
@@ -55,12 +49,11 @@ public class Portfolio {
     public Portfolio() {
     }
 
-    public Portfolio(String name, LocalDate dateOfCreation, Long initialInvestment, User user, List<Deal> tradingHistory, List<PortfolioStock> portfolioStocks, List<Deal> deals) {
+    public Portfolio(String name, LocalDate dateOfCreation, Long initialInvestment, User user, List<PortfolioStock> portfolioStocks, List<Deal> deals) {
         this.name = name;
         this.dateOfCreation = dateOfCreation;
         this.initialInvestment = initialInvestment;
         this.user = user;
-        this.tradingHistory = tradingHistory;
         this.portfolioStocks = portfolioStocks;
         this.deals = deals;
     }
@@ -103,14 +96,6 @@ public class Portfolio {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public List<Deal> getTradingHistory() {
-        return tradingHistory;
-    }
-
-    public void setTradingHistory(List<Deal> tradingHistory) {
-        this.tradingHistory = tradingHistory;
     }
 
     public List<PortfolioStock> getPortfolioStocks() {
