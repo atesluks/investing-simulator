@@ -15,7 +15,7 @@ public class DealRestController {
     @Autowired
     private DealService dealService;
 
-    @GetMapping("/deal")
+    @GetMapping("/deals")
     public Iterable<Deal> getAllDeals() {
         return dealService.getAllDeals();
     }
