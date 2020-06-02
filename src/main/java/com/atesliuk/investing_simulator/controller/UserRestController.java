@@ -44,7 +44,7 @@ public class UserRestController {
             return "Error. User with id "+userId+" was not found.";
         }
         userService.deleteUser(tempUser);
-        return "Deleted customer id - " + userId;
+        return "Deleted user id - " + userId;
     }
 
 }

@@ -31,6 +31,8 @@ public class Portfolio {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @OneToMany(mappedBy = "portfolio", cascade = {CascadeType.PERSIST, CascadeType.DETACH,
+            CascadeType.MERGE, CascadeType.REFRESH})
     private List<Deal> tradingHistory;
 
     @OneToMany(mappedBy = "portfolio",cascade = {CascadeType.PERSIST, CascadeType.DETACH,
