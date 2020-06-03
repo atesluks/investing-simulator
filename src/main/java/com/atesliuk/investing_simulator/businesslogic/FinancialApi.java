@@ -3,55 +3,76 @@ package com.atesliuk.investing_simulator.businesslogic;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.core.io.ClassPathResource;
-import pl.zankowski.iextrading4j.client.IEXCloudClient;
-import yahoofinance.Stock;
-import yahoofinance.YahooFinance;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+
+
 
 public class FinancialApi {
 
-    private List<String> symbols;
+    private Map<String, StockInfo> stocks;
 
-    private IEXCloudClient cloudClient;
+    private final String BASE_URL = "https://www.alphavantage.co/query?";
+    private final String API_KEY="S8A9YDO8RF1BSB8W";
+
 
     public FinancialApi() {
         prepareListOfSymbols();
 
+    }
+
+    public void updateStockQuotes (String symbol){
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL+"function=GLOBAL_QUOTE&symbol="+symbol+"&apikey="+API_KEY))
+                .build();
+
         try {
-            Stock tesla = YahooFinance.get("TSLA", true);
-            System.out.println(tesla.getHistory());
-        } catch (IOException e) {
-            e.printStackTrace();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            JSONObject jsonObject = new JSONObject(response.body());
+            System.out.println(jsonObject);
+            JSONObject quote = jsonObject.getJSONObject("Global Quote");
+            StockInfo stockInfo = stocks.get(quote.getString("01. symbol"));
+            stockInfo.setPrice(quote.getDouble("05. price"));
+            stockInfo.setDailyChangePercents(quote.getDouble("10. change percent"));
+
+        } catch (Exception e) {
+            //e.printStackTrace();
         }
-
-
     }
 
-    public List<Stock> getStockInfo(List<String> requestedStocks){
-        return null;
+    public void updateStockQuotes(List<String> symbols){
+        Map<String, StockInfo> result = new HashMap<>();
+        for (String s : symbols){
+            updateStockQuotes(s);
+        }
     }
 
-    public List<String> getSymbols() {
-        return new ArrayList<>(symbols);
+    public Map<String, StockInfo> getStocks() {
+        return stocks;
     }
 
-    public void setSymbols(List<String> symbols) {
-        this.symbols = new ArrayList<>(symbols);
+    public void setStocks(Map<String, StockInfo> stocks) {
+        this.stocks = stocks;
     }
 
-    public void getStockInfo(String ticker){
 
-    }
+
 
     private void prepareListOfSymbols(){
-        symbols = new ArrayList<>();
+        stocks = new HashMap<>();
         String output= "";
 
         try{
@@ -67,12 +88,21 @@ public class FinancialApi {
 
         for (int i=0; i<jsonArray.length();i++){
             JSONObject jo = jsonArray.getJSONObject(i);
-            symbols.add(jo.getString("symbol"));
+
+            StockInfo stock = new StockInfo();
+            stock.setCompanyName(jo.getString("name"));
+            stock.setSymbol(jo.getString("symbol"));
+            stock.setExchange(jo.getString("exchange"));
+
+            stocks.put(stock.getSymbol(), stock);
         }
     }
 
+
+
     public static void main(String[] args) {
         FinancialApi f = new FinancialApi();
+        System.out.println(f.stocks);
     }
 
 
