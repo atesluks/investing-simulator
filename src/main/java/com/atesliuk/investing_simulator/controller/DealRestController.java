@@ -21,7 +21,7 @@ public class DealRestController {
     }
 
     @GetMapping("/deals/{dealId}")
-    public Deal getDeal(@RequestBody Long dealId) {
+    public Deal getDeal(@PathVariable Long dealId) {
         Deal theDeal = dealService.getDeal(dealId);
         if (theDeal == null) throw new EntityNotFoundException("Deal id not found - " + dealId);
         return theDeal;
@@ -40,7 +40,7 @@ public class DealRestController {
     }
 
     @DeleteMapping("/deals/{dealId}")
-    public String deleteDeal(@RequestBody Long dealId) {
+    public String deleteDeal(@PathVariable Long dealId) {
         Deal theDeal = dealService.getDeal(dealId);
         if (theDeal == null) {
             return "Error. User with id " + dealId + " was not found.";

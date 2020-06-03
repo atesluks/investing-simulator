@@ -1,4 +1,4 @@
-package com.atesliuk.investing_simulator.businesslogic;
+package com.atesliuk.investing_simulator.financials;
 
 public class StockInfo {
 

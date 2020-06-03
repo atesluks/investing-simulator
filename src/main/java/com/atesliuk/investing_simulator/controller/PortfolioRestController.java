@@ -21,7 +21,7 @@ public class PortfolioRestController {
     }
 
     @GetMapping("/portfolios/{portfolioId}")
-    public Portfolio getPortfolio(@RequestBody Long portfolioId){
+    public Portfolio getPortfolio(@PathVariable Long portfolioId){
         Portfolio thePortfolio = portfolioService.getPortfolio(portfolioId);
         if (thePortfolio==null) throw new EntityNotFoundException("Portfolio id not found - " + portfolioId);
         return thePortfolio;
@@ -40,7 +40,7 @@ public class PortfolioRestController {
     }
 
     @DeleteMapping("/portfolios/{portfolioId}")
-    public String deletePortfolio(@RequestBody Long portfolioId){
+    public String deletePortfolio(@PathVariable Long portfolioId){
         Portfolio thePortfolio = portfolioService.getPortfolio(portfolioId);
         if (thePortfolio == null){
             //throw new CustomerNotFoundException("Customer id not found - "+customerId);

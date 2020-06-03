@@ -1,4 +1,4 @@
-package com.atesliuk.investing_simulator.businesslogic;
+package com.atesliuk.investing_simulator.financials;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -27,7 +27,7 @@ public class FinancialApi {
 
 
     public FinancialApi() {
-        prepareListOfSymbols();
+        prepareListOfStocks();
 
     }
 
@@ -60,23 +60,12 @@ public class FinancialApi {
         }
     }
 
-    public Map<String, StockInfo> getStocks() {
-        return stocks;
-    }
-
-    public void setStocks(Map<String, StockInfo> stocks) {
-        this.stocks = stocks;
-    }
-
-
-
-
-    private void prepareListOfSymbols(){
+    private void prepareListOfStocks(){
         stocks = new HashMap<>();
-        String output= "";
 
+        String output= "";
         try{
-            //getting a file from a resource folder
+            //getting a file from a resource folder (with 25 companies)
             InputStream resource = new ClassPathResource("static/apidata/USCompanies.txt").getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(resource));
             output = reader.lines().collect(Collectors.joining("\n"));
@@ -96,6 +85,12 @@ public class FinancialApi {
 
             stocks.put(stock.getSymbol(), stock);
         }
+    }
+
+    // getters
+
+    public Map<String, StockInfo> getStocks() {
+        return stocks;
     }
 
 

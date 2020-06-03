@@ -1,6 +1,6 @@
 package com.atesliuk.investing_simulator.service;
 
-import com.atesliuk.investing_simulator.businesslogic.StockInfo;
+import com.atesliuk.investing_simulator.financials.StockInfo;
 
 import java.util.List;
 import java.util.Map;

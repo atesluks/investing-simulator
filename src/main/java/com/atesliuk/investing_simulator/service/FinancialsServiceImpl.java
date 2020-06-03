@@ -1,7 +1,7 @@
 package com.atesliuk.investing_simulator.service;
 
-import com.atesliuk.investing_simulator.businesslogic.FinancialApi;
-import com.atesliuk.investing_simulator.businesslogic.StockInfo;
+import com.atesliuk.investing_simulator.financials.FinancialApi;
+import com.atesliuk.investing_simulator.financials.StockInfo;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;

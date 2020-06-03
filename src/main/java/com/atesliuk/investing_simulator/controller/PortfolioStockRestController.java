@@ -19,7 +19,7 @@ public class PortfolioStockRestController {
     }
 
     @GetMapping("/portfolioStocks/{portfolioStockId}")
-    public PortfolioStock getPortfolioStock(@RequestBody Long portfolioStockId) {
+    public PortfolioStock getPortfolioStock(@PathVariable Long portfolioStockId) {
         PortfolioStock thePortfolioStock = portfolioStockService.getPortfolioStock(portfolioStockId);
         if (thePortfolioStock == null) throw new EntityNotFoundException("Deal id not found - " + portfolioStockId);
         return thePortfolioStock;
@@ -37,7 +37,7 @@ public class PortfolioStockRestController {
     }
 
     @DeleteMapping("/portfolioStocks/{portfolioStockId}")
-    public String deletePortfolioStock(@RequestBody Long portfolioStockId) {
+    public String deletePortfolioStock(@PathVariable Long portfolioStockId) {
         PortfolioStock thePortfolioStock = portfolioStockService.getPortfolioStock(portfolioStockId);
         if (thePortfolioStock == null) {
             return "Error. User with id " + portfolioStockId + " was not found.";
