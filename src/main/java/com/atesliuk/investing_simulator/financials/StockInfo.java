@@ -1,5 +1,7 @@
 package com.atesliuk.investing_simulator.financials;
 
+import java.time.LocalDateTime;
+
 public class StockInfo {
 
     private String companyName;
@@ -7,16 +9,18 @@ public class StockInfo {
     private String price;
     private String dailyChangePercents;
     private String exchange;
+    private LocalDateTime lastUpdated;
 
     public StockInfo() {
     }
 
-    public StockInfo(String companyName, String symbol, String price, String dailyChangePercents, String exchange) {
+    public StockInfo(String companyName, String symbol, String price, String dailyChangePercents, String exchange, LocalDateTime lastUpdated) {
         this.companyName = companyName;
         this.symbol = symbol;
         this.price = price;
         this.dailyChangePercents = dailyChangePercents;
         this.exchange = exchange;
+        this.lastUpdated = lastUpdated;
     }
 
     public String getCompanyName() {
@@ -59,6 +63,14 @@ public class StockInfo {
         this.exchange = exchange;
     }
 
+    public LocalDateTime getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(LocalDateTime lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
+
     @Override
     public String toString() {
         return "StockInfo{" +
@@ -67,6 +79,7 @@ public class StockInfo {
                 ", price=" + price +
                 ", dailyChangePercents=" + dailyChangePercents +
                 ", exchange=" + exchange +
+                ", lastUpdated=" + lastUpdated +
                 '}';
     }
 }

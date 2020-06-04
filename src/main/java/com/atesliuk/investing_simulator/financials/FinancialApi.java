@@ -97,6 +97,7 @@ public class FinancialApi {
             StockInfo stockInfo = stocks.get(symbol);
             stockInfo.setPrice(quote.getString("05. price"));
             stockInfo.setDailyChangePercents(quote.getString("10. change percent"));
+            stockInfo.setLastUpdated(LocalDateTime.now());
 
             System.out.println("--- "+symbol+" was retrieved successfully!!! The queue: "+priorityQueue);
             testPrices.put(symbol, stockInfo.getPrice());
