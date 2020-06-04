@@ -4,14 +4,14 @@ public class StockInfo {
 
     private String companyName;
     private String symbol;
-    private double price;
-    private double dailyChangePercents;
+    private String price;
+    private String dailyChangePercents;
     private String exchange;
 
     public StockInfo() {
     }
 
-    public StockInfo(String companyName, String symbol, int price, double dailyChangePercents, String exchange) {
+    public StockInfo(String companyName, String symbol, String price, String dailyChangePercents, String exchange) {
         this.companyName = companyName;
         this.symbol = symbol;
         this.price = price;
@@ -35,19 +35,19 @@ public class StockInfo {
         this.symbol = symbol;
     }
 
-    public double getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
-    public double getDailyChangePercents() {
+    public String getDailyChangePercents() {
         return dailyChangePercents;
     }
 
-    public void setDailyChangePercents(double dailyChangePercents) {
+    public void setDailyChangePercents(String dailyChangePercents) {
         this.dailyChangePercents = dailyChangePercents;
     }
 

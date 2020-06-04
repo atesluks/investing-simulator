@@ -13,19 +13,6 @@
         "cik": "104169"
     },
     {
-        "symbol": "XOM",
-        "exchange": "NYS",
-        "name": "Exxon Mobil Corporation",
-        "date": "2020-05-31",
-        "type": "cs",
-        "iexId": "IEX_5147314852372D52",
-        "region": "US",
-        "currency": "USD",
-        "isEnabled": true,
-        "figi": "BBG000GZQ728",
-        "cik": "34088"
-    },
-    {
         "symbol": "AAPL",
         "exchange": "NAS",
         "name": "Apple Inc.",
@@ -104,19 +91,6 @@
         "cik": "37996"
     },
     {
-        "symbol": "GM",
-        "exchange": "NYS",
-        "name": "General Motors Company",
-        "date": "2020-05-31",
-        "type": "cs",
-        "iexId": "IEX_543053515A482D52",
-        "region": "US",
-        "currency": "USD",
-        "isEnabled": true,
-        "figi": "BBG000NDYB67",
-        "cik": "1467858"
-    },
-    {
         "symbol": "GOOGL",
         "exchange": "NAS",
         "name": "Alphabet Inc. Class A",
@@ -128,19 +102,6 @@
         "isEnabled": true,
         "figi": "BBG009S39JX6",
         "cik": "1652044"
-    },
-    {
-        "symbol": "JPM",
-        "exchange": "NYS",
-        "name": "JPMorgan Chase & Co.",
-        "date": "2020-05-31",
-        "type": "cs",
-        "iexId": "IEX_4E4E4B4432592D52",
-        "region": "US",
-        "currency": "USD",
-        "isEnabled": true,
-        "figi": "BBG000DMBXR2",
-        "cik": "19617"
     },
     {
          "symbol": "GE",
@@ -195,19 +156,6 @@
         "cik": "12927"
     },
     {
-        "symbol": "DELL",
-        "exchange": "NYS",
-        "name": "Dell Technologies Inc Class C",
-        "date": "2020-05-31",
-        "type": "cs",
-        "iexId": "IEX_4D54384644522D52",
-        "region": "US",
-        "currency": "USD",
-        "isEnabled": true,
-        "figi": "BBG00DW3SZS1",
-        "cik": "1571996"
-    },
-    {
         "symbol": "IBM",
         "exchange": "NYS",
         "name": "International Business Machines Corporation",
@@ -232,19 +180,6 @@
         "isEnabled": true,
         "figi": "BBG000C0G1D1",
         "cik": "50863"
-    },
-    {
-        "symbol": "PG",
-        "exchange": "NYS",
-        "name": "Procter & Gamble Company",
-        "date": "2020-05-31",
-        "type": "cs",
-        "iexId": "IEX_525A584457562D52",
-        "region": "US",
-        "currency": "USD",
-        "isEnabled": true,
-        "figi": "BBG000BR2TH3",
-        "cik": "80424"
     },
     {
         "symbol": "PEP",

@@ -5,7 +5,6 @@ import com.atesliuk.investing_simulator.service.FinancialsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -20,9 +19,16 @@ public class FinancialsController {
         return financialsService.getAllStockQuotes();
     }
 
-    @PostMapping("/financials")
-    public Map<String, StockInfo> getStocksQuotes(@RequestBody List<String> symbols){
-        return financialsService.getStocksQuotes(symbols);
+    @GetMapping("/financials/isUpdating")
+    public Boolean getIsUpdating(){
+        return financialsService.getKeepUpdating();
+    }
+
+    @PostMapping("/financials/isUpdating/{isUpdatingValue}")
+    public String setIsUpdaating(@PathVariable Boolean isUpdatingValue){
+        financialsService.setKeepUpdating(isUpdatingValue);
+        String result = isUpdatingValue? "Stocks are updating" : "Stocks stopped updating" ;
+        return result;
     }
 
 }
