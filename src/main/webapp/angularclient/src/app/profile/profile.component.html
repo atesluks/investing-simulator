@@ -1,0 +1,76 @@
+<script type="text/javascript" src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+
+<br><br>
+
+<h3>Personal information</h3>
+
+<br>
+
+
+<div class="d-flex justify-content-center">
+
+    <div class="row">
+        <form>
+            <div class="form-group">
+                <label for="inputEmail">Email address</label>
+                <input type="email" class="form-control" id="inputEmail" aria-describedby="emailHelp"
+                       placeholder="Enter email"
+                       value="{{theUser.email}}">
+                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
+                    else.</small>
+            </div>
+            <div class="form-group">
+                <label for="inputFirstName">First Name</label>
+                <input type="text" class="form-control" id="inputFirstName" placeholder="Enter your first name"
+                       value="{{theUser.firstName}}">
+            </div>
+            <div class="form-group">
+                <label for="inputLastName">Last Name</label>
+                <input type="text" class="form-control" id="inputLastName" placeholder="Enter your last name"
+                       value="{{theUser.lastName}}">
+            </div>
+            <button type="submit" class="btn btn-primary" (click)="profileSaved($event)">Save changes</button>
+        </form>
+    </div>
+</div>
+
+
+<br><br><br>
+
+<div class="alert {{changePasswordAlertType}} alert-dismissible fade show" role="alert">
+    {{changePasswordAlertMessage}}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+<h3>Change password</h3>
+
+<br>
+
+<div class="d-flex justify-content-center">
+    <div class="row">
+        <div class="container">
+            <form>
+                <div class="form-group">
+                    <input type="password" class="form-control" placeholder="Old password"
+                           [value]="oldPasswordValue" (input)="oldPasswordValue = $event.target.value;">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" placeholder="New password"
+                           [value]="newPasswordValue1" (input)="newPasswordValue1 = $event.target.value;">
+                </div>
+                <small id="passwordHelpBlock" class="form-text text-muted">
+                    Your password must be 8-20 characters long.
+                </small>
+                <div class="form-group">
+                    <input type="password" class="form-control" placeholder="Confirm new password"
+                           [value]="newPasswordValue2" (input)="newPasswordValue2 = $event.target.value;">
+                </div>
+                <button type="submit" class="btn btn-primary" (click)="passwordChanged($event, oldPasswordValue,newPasswordValue1,newPasswordValue2)">Save new password</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<br><br>
