@@ -12,7 +12,8 @@ public class FinancialsServiceImpl implements FinancialsService{
     private FinancialApi financialApi;
 
     public FinancialsServiceImpl() {
-        financialApi = new FinancialApi();
+        //turned it off while testing other stuff
+        //financialApi = new FinancialApi();
     }
 
     @Override

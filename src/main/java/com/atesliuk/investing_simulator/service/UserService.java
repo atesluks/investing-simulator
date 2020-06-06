@@ -12,4 +12,8 @@ public interface UserService {
 
     void deleteUser(User user);
 
+    Boolean matchPassword(User user, String testedPassword);
+
+    User login(String email, String password);
+
 }

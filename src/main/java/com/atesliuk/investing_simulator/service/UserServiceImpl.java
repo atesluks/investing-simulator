@@ -5,6 +5,7 @@ import com.atesliuk.investing_simulator.repository.UserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,5 +34,23 @@ public class UserServiceImpl implements UserService{
     @Override
     public void deleteUser(User user) {
         userDAO.delete(user);
+    }
+
+    @Override
+    public Boolean matchPassword(User user, String testedPassword) {
+        return user.getPassword().equals(testedPassword);
+    }
+
+    @Override
+    public User login(String email, String password) {
+        List<User> result = userDAO.findByEmailAndPassword(email,password);
+        System.out.println("UserServiceImpl.loging() results: "+result);
+        if (result.size()>1){
+            throw new RuntimeException("Something went wrong! More than one User with the same email and password!");
+        }else if (result.size()==0){
+            return null;
+        }else{
+            return result.get(0);
+        }
     }
 }

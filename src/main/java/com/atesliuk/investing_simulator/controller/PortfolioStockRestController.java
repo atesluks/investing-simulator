@@ -6,6 +6,7 @@ import com.atesliuk.investing_simulator.service.PortfolioStockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
 @RequestMapping("/api")
 public class PortfolioStockRestController {
