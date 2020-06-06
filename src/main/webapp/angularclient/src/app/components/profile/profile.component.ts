@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {User} from "../shared/model/user";
-import {UserService} from "../shared/user/user.service";
+import {User} from "../../model/user";
+import {UserService} from "../../services/user.service";
 
 @Component({
   selector: 'app-profile',
@@ -10,10 +10,10 @@ import {UserService} from "../shared/user/user.service";
 export class ProfileComponent implements OnInit {
 
     private theUser: User;
+
     private oldPasswordValue:string;
     private newPasswordValue1:string;
     private newPasswordValue2:string;
-
 
     private updateProfileAlertType:string;
     private updateProfileAlertMessage:string;
@@ -24,7 +24,7 @@ export class ProfileComponent implements OnInit {
     constructor(private userService: UserService) { }
 
     ngOnInit() {
-        this.theUser = new User();
+        this.theUser = new User("", "", "", "");
 
         this.userService.getUser(2).subscribe((response: User) =>{
             console.log(response);
