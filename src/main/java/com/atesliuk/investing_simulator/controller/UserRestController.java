@@ -59,12 +59,13 @@ public class UserRestController {
         User theUser = userService.getUser(userId);
         if (theUser==null) throw new EntityNotFoundException("User id not found - "+userId);
         boolean result = userService.matchPassword(theUser, testedPassword);
-        System.out.println("Received request for password amtching! The result: "+result);
+        System.out.println("Received request for password matching! The result: "+result);
         return result;
     }
 
     @PostMapping("/login")
     public User login(@RequestBody String[] credentials){
+        //System.out.println("UserRestController.login() was called: "+ Arrays.toString(credentials));
         User result = userService.login(credentials[0], credentials[1]);
         if (result==null){
             throw new NullPointerException("No users were found!");
@@ -73,6 +74,7 @@ public class UserRestController {
         }
     }
 
+    //helper method
     private User capitaliseName(User theUser){
         //capitalizing first letters in case they are lowercase
         String firstName = theUser.getFirstName();

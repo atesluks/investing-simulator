@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public User login(String email, String password) {
         List<User> result = userDAO.findByEmailAndPassword(email,password);
-        System.out.println("UserServiceImpl.loging() results: "+result);
+        //System.out.println("UserServiceImpl.loging() results: "+result);
         if (result.size()>1){
             throw new RuntimeException("Something went wrong! More than one User with the same email and password!");
         }else if (result.size()==0){
