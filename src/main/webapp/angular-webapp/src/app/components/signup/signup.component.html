@@ -48,7 +48,13 @@
         <div class="row">
           <div class="col">
             <button type="submit" class="btn btn-primary"
-                    (click)="onSignup($event, email.value, firstName.value, lastName.value, password.value, repeatPassword.value)">Create account</button>
+                    (click)="onSignup($event, email.value, firstName.value, lastName.value, password.value, repeatPassword.value)">
+              Create account</button>
+            <div class="col-5">
+              <div class="spinner-border text-primary {{this.spinnerFadeShow}}" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+            </div>
           </div>
           <div class="col-3">
             <button type="submit" class="btn btn-secondary" routerLink="/login">Login</button>

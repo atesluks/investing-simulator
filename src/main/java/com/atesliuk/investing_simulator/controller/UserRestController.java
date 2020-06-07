@@ -30,6 +30,8 @@ public class UserRestController {
     public User addUser(@RequestBody User theUser){
         theUser.setId(0L);
 
+        System.out.println("UserRestController.addUser(): "+theUser);
+
         //capitalizing first letters in case they are lowercase
         theUser = capitaliseName(theUser);
 

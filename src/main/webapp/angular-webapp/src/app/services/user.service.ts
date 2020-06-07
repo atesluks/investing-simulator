@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
 import {User} from "../models/User";
-import {Observable, throwError} from "rxjs";
-import {catchError, retry} from "rxjs/operators";
+import {Observable, throwError, of} from "rxjs";
+import {catchError, map, retry, tap} from "rxjs/operators";
 import {GlobalVariables} from "../models/GlobalVariables";
 
 @Injectable({
@@ -17,38 +17,43 @@ export class UserService {
     this.BASE_URL = "http://localhost:8080/api";
   }
 
-
-  login(credentials: string[]){
-    let result = this.http.post<User>(this.BASE_URL + "/login", credentials)
-      .pipe(catchError(this.handleError))
-      .subscribe((user: User) =>{
-        console.log("Output:");
-        console.log(user);
-        this.globals.user = user;
-        //will finish later
-    });
-
-    return result;
-
-  }
-
-  private handleError(error: HttpErrorResponse) {
-    if (error.error instanceof ErrorEvent) {
-      // A client-side or network error occurred
-      console.error('An error occurred:', error.error.message);
-    } else {
-      // The backend returned an unsuccessful response code.
-      console.error(
-        `Backend returned code ${error.status}, ` +
-        `body was: ${error.error}`);
-    }
-    // return an observable with a user-facing error message
-    //return throwError('Something bad happened; please try again later.');
-    return new Observable(observer => {
-      observer.next("error");
-    });
+  httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
 
+
+  login(credentials: string[]): Observable<User>{
+    return this.http.post<User>(this.BASE_URL + "/login", credentials, this.httpOptions)
+      .pipe(
+        //map(users => users[0]), // returns a {0|1} element array
+        tap(h => {
+          const outcome = h ? `fetched` : `did not find`;
+          console.log(`${outcome} user`);
+        }),
+        catchError(this.handleError<User>(`login email=${credentials[0]}`)));
+  }
+
+  signup(user: User): Observable<User>{
+    console.log("Passed user:");
+    console.log(user);
+    return this.http.post<User>(this.BASE_URL + "/users", user, this.httpOptions)
+      .pipe(
+        //map(users => users[0]), // returns a {0|1} element array
+        tap(h => {
+          const outcome = h ? `fetched` : `did not find`;
+          console.log(`${outcome} user`);
+        }),
+        catchError(this.handleError<User>(`login email=${user}`)));
+  }
+
+  private handleError<T>(operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+      console.error(error); // log to console instead
+      console.log(`${operation} failed: ${error.message}`);
+
+      // Let the app keep running by returning an empty result.
+      return of(result as T);
+    };
+  }
+
 }
-
-

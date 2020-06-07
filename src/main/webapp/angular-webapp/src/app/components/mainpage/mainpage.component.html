@@ -1,0 +1,23 @@
+<p>mainpage works!</p>
+
+<br>
+
+<ul>
+  <li>Id: {{this.theUser.id}}</li>
+  <li>Email: {{this.theUser.email}}</li>
+  <li>First name: {{this.theUser.firstName}}</li>
+  <li>Last name: {{this.theUser.lastName}}</li>
+  <li>Password: {{this.theUser.password}}</li>
+</ul>
+
+<form>
+  <div class="form-group">
+    <label for="inputFirstName">First name</label>
+    <input type="text" class="form-control" id="inputFirstName" required="true" data-bv-notempty-message="The first name is required">
+  </div>
+  <div class="row">
+    <div class="col">
+      <button type="submit" class="btn btn-primary">Create account</button>
+    </div>
+  </div>
+</form>
