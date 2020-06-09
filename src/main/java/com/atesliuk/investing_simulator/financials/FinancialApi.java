@@ -102,6 +102,8 @@ public class FinancialApi {
             System.out.println("--- "+symbol+" was retrieved successfully!!! The queue: "+priorityQueue);
             testPrices.put(symbol, stockInfo.getPrice());
             System.out.println("--- "+testPrices);
+            if (priorityQueue.isEmpty())
+                System.out.println("All stocks updated. Next update will be in an hour");
         }catch(Exception e){
             System.out.println("\t\t*API got blocked for the symbol "+symbol+". Will retry a bit later... ");
             long timeDifference = lastBlockedRequestTime.until(LocalDateTime.now(), SECONDS);

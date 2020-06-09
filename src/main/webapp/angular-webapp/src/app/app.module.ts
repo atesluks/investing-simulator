@@ -8,7 +8,6 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
 import {UserService} from "./services/user.service";
-import {GlobalVariables} from "./models/GlobalVariables";
 import { MainpageComponent } from './components/mainpage/mainpage.component';
 import { PortfolioListComponent } from './components/mainpage/portfolio-list/portfolio-list.component';
 import { AllStocksListComponent } from './components/mainpage/all-stocks-list/all-stocks-list.component';
@@ -40,7 +39,7 @@ const appRoutes: Routes = [
     HttpClientModule,
     FormsModule
   ],
-  providers: [UserService, GlobalVariables],
+  providers: [UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

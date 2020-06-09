@@ -6,6 +6,8 @@ import com.atesliuk.investing_simulator.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
 @RequestMapping("/api")
@@ -29,12 +31,12 @@ public class UserRestController {
     @PostMapping("/users")
     public User addUser(@RequestBody User theUser){
         theUser.setId(0L);
+        theUser.setPortfolios(new ArrayList<>());
 
         System.out.println("UserRestController.addUser(): "+theUser);
 
         //capitalizing first letters in case they are lowercase
         theUser = capitaliseName(theUser);
-
         return userService.saveUser(theUser);
     }
 
@@ -67,7 +69,6 @@ public class UserRestController {
 
     @PostMapping("/login")
     public User login(@RequestBody String[] credentials){
-        //System.out.println("UserRestController.login() was called: "+ Arrays.toString(credentials));
         User result = userService.login(credentials[0], credentials[1]);
         if (result==null){
             throw new NullPointerException("No users were found!");
@@ -81,8 +82,8 @@ public class UserRestController {
         //capitalizing first letters in case they are lowercase
         String firstName = theUser.getFirstName();
         String lastName = theUser.getLastName();
-        firstName = firstName.substring(0, 1).toUpperCase() + firstName.substring(1);
-        lastName = lastName.substring(0, 1).toUpperCase() + lastName.substring(1);
+        firstName = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
+        lastName = lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase();
         theUser.setFirstName(firstName);
         theUser.setLastName(lastName);
         return theUser;

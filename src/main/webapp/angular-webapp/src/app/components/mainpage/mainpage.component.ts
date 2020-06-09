@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {UserService} from "../../services/user.service";
+import * as $ from 'jquery';
+import {Router} from "@angular/router";
+import {Cookie} from 'ng2-cookies/ng2-cookies';
 import {User} from "../../models/User";
-import {GlobalVariables} from "../../models/GlobalVariables";
 
 @Component({
   selector: 'app-mainpage',
@@ -9,15 +12,23 @@ import {GlobalVariables} from "../../models/GlobalVariables";
 })
 export class MainpageComponent implements OnInit {
 
-  theUser:User;
+  private theUser: User;
 
-  constructor(private globalVariables: GlobalVariables) {
-    this.theUser = globalVariables.user;
-    console.log("From the main component:");
+  constructor(private userService: UserService,
+              private router: Router) {
+
+    this.theUser = JSON.parse(Cookie.get('user'));
+    console.log("Cookies.theUser (in main page):");
     console.log(this.theUser);
+
+    if (this.theUser == undefined) {
+      this.router.navigate(['/login']);
+    }
   }
 
   ngOnInit() {
+
   }
+
 
 }

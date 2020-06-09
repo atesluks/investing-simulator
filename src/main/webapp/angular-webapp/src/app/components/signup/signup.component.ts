@@ -1,15 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import {UserService} from "../../services/user.service";
-import {GlobalVariables} from "../../models/GlobalVariables";
 import {User} from "../../models/User";
 import {Router} from "@angular/router";
-import {NgForm} from '@angular/forms';
+import {Cookie} from 'ng2-cookies/ng2-cookies';
 
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.css'],
-  providers: [GlobalVariables]
+  styleUrls: ['./signup.component.css']
 })
 export class SignupComponent implements OnInit {
 
@@ -19,8 +17,11 @@ export class SignupComponent implements OnInit {
   private spinnerFadeShow: string;
 
   constructor(private userService: UserService,
-              public globals: GlobalVariables,
-              private router: Router) { }
+              private router: Router) {
+    if (JSON.parse(Cookie.get('user')) != undefined) {
+      this.router.navigate(['/']);
+    }
+  }
 
   ngOnInit() {
     this.alertFadeShow = 'fade';
@@ -46,17 +47,15 @@ export class SignupComponent implements OnInit {
     user.password = password;
 
     this.userService.signup(user).subscribe((result: User)=>{
-      this.globals.user = result;
-
-      console.log("Returned user:");
-      console.log(result instanceof User);
-      console.log(User);
+      console.log("Signup returned user:");
+      console.log(result);
 
       this.spinnerFadeShow = 'fade';
 
-      if (this.globals.user == undefined){
+      if (result == undefined){
         this.changeAlert("alert-danger", "User with this email already exists");
       }else{
+        Cookie.set('user',JSON.stringify(result));
         this.alertFadeShow = "fade";
         //go to the main page
         this.router.navigate(['/']);

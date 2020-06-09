@@ -1,14 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {UserService} from "../../services/user.service";
-import {GlobalVariables} from "../../models/GlobalVariables";
 import {User} from "../../models/User";
 import {Router} from '@angular/router';
+import {Cookie} from 'ng2-cookies/ng2-cookies';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
-  providers: [GlobalVariables]
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
 
@@ -18,13 +17,16 @@ export class LoginComponent implements OnInit {
   private spinnerFadeShow: string;
 
   constructor(private userService: UserService,
-              public globals: GlobalVariables,
               private router: Router) {
-    this.alertFadeShow = 'fade';
-    this.spinnerFadeShow = 'fade';
+
+    if (JSON.parse(Cookie.get('user')) != undefined) {
+      this.router.navigate(['/']);
+    }
   }
 
   ngOnInit() {
+    this.alertFadeShow = 'fade';
+    this.spinnerFadeShow = 'fade';
   }
 
   onLogin(event: Event, email: string, password: string) {
@@ -35,13 +37,16 @@ export class LoginComponent implements OnInit {
     let credentials = [email, password];
 
     this.userService.login(credentials).subscribe((result: User)=>{
-      this.globals.user = result;
+
+      console.log("Login returned user:");
+      console.log(result);
 
       this.spinnerFadeShow = 'fade';
 
-      if (this.globals.user == undefined){
+      if (result == undefined){
         this.changeAlert("alert-danger", "Email or password is incorrect");
       }else{
+        Cookie.set('user',JSON.stringify(result));
         this.alertFadeShow = "fade";
         //go to the main page
         this.router.navigate(['/']);
