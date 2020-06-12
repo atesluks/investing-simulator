@@ -30,6 +30,7 @@ export class PortfolioListComponent implements OnInit {
     this.createPortfolioAlertText = "Portfolio with this name already exists! Chose another name!";
     this.createPortfolioAlertType = "alert-danger";
     this.spinnerFadeShow= "fade";
+    this.portfolioToDelete = new Portfolio("",0,0);
   }
 
   getPortfolios(){
@@ -117,12 +118,15 @@ export class PortfolioListComponent implements OnInit {
     });
   }
 
-  hideAlert(){
-    this.createPortfolioAlertHideShow = "fade";
-  }
 
   setPortfolioToDelete(portfolio: Portfolio){
     this.portfolioToDelete = portfolio;
+  }
+
+  onModalClosed(){
+    this.spinnerFadeShow="fade";
+    this.createPortfolioAlertHideShow="fade";
+    document.getElementById("closeModalButton").click();
   }
 
 }

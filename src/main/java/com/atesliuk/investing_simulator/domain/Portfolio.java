@@ -193,7 +193,7 @@ public class Portfolio {
         Long total_value = this.getCash();
         try{
             List<PortfolioStock> portfolioStocks = this.getPortfolioStocks();
-            if (portfolioStocks == null || portfolioStocks.size() == 0) return total_value;
+            if (portfolioStocks == null || financialsService == null || portfolioStocks.size() == 0) return total_value;
             for (PortfolioStock stock : this.getPortfolioStocks()) {
                 String symbol = stock.getTicker();
                 StockInfo stockInfo = financialsService.getAllStockQuotes().get(symbol);

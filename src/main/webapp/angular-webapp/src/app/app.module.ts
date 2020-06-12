@@ -15,11 +15,13 @@ import { GraphComponent } from './components/mainpage/graph/graph.component';
 import { LatestDealsComponent } from './components/mainpage/latest-deals/latest-deals.component';
 import {FormsModule} from "@angular/forms";
 import {FinancialsService} from "./services/financials.service";
+import { PortfolioComponent } from './components/portfolio/portfolio.component';
 
 const appRoutes: Routes = [
   {path:'', component:MainpageComponent},
   {path:'login', component:LoginComponent},
-  {path:'signup', component:SignupComponent}
+  {path:'signup', component:SignupComponent},
+  {path:'portfolio/:id', component:PortfolioComponent}
 ]
 
 @NgModule({
@@ -31,7 +33,8 @@ const appRoutes: Routes = [
     PortfolioListComponent,
     AllStocksListComponent,
     GraphComponent,
-    LatestDealsComponent
+    LatestDealsComponent,
+    PortfolioComponent
   ],
   imports: [
     BrowserModule,

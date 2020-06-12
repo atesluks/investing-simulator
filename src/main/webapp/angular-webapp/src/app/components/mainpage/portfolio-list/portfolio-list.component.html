@@ -1,17 +1,17 @@
-<ul class="list-group">
-  <li class="list-group-item active">Portfolios
+<div class="list-group">
+  <a href="#" class="list-group-item list-group-item-action active">
+    Portfolios
     <button type="button" class="btn btn-light" data-toggle="modal" data-target="#addPortfolioModal">
       New portfolio
     </button>
-  </li>
+  </a>
   <div *ngFor="let portfolio of allPortfolios">
-    <li class="list-group-item">{{portfolio.name}} | {{portfolio.current_portfolio_value}}
-      <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deletePortfolioModal" (click)="setPortfolioToDelete(portfolio)">
-        Delete
-      </button>
-    </li>
+    <a href="/portfolio/{{portfolio.id}}" class="list-group-item list-group-item-action">{{portfolio.name}} | {{portfolio.current_portfolio_value}} </a>
+    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deletePortfolioModal"
+            (click)="setPortfolioToDelete(portfolio)"> Delete
+    </button>
   </div>
-</ul>
+</div>
 
 <!-- Add portfolio Modal -->
 <div class="modal fade" id="addPortfolioModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -24,7 +24,7 @@
 
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">Create new portfolio</h5>
-          <button type="button" class="close" data-dismiss="modal" id="closeModalButton" aria-label="Close">
+          <button type="button" class="close" data-dismiss="modal" id="closeModalButton" aria-label="Close" (click)="onModalClosed()">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
@@ -34,7 +34,7 @@
             class="alert {{this.createPortfolioAlertType}} alert-dismissible collapse {{this.createPortfolioAlertHideShow}}"
             role="alert">
             {{this.createPortfolioAlertText}}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="this.hideAlert()">
+            <button type="button" class="close" aria-label="Close" (click)="this.createPortfolioAlertHideShow='fade'">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -49,7 +49,7 @@
             <div class="input-group-prepend">
               <span class="input-group-text">$</span>
             </div>
-            <input #initialInvestment type="number" min="0" class="form-control" id="inputAmount"
+            <input #initialInvestment type="number" min="1000" class="form-control" id="inputAmount"
                    value="10000" aria-label="Amount (to the nearest dollar)" required>
             <div class="input-group-append">
               <span class="input-group-text">.00</span>
@@ -61,7 +61,7 @@
           <div class="spinner-border text-primary {{this.spinnerFadeShow}}" role="status">
             <span class="sr-only">Loading...</span>
           </div>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="onModalClosed()">Cancel</button>
           <button type="submit" class="btn btn-primary">Create portfolio</button>
         </div>
 
@@ -72,8 +72,8 @@
 </div>
 
 <!-- Delete Portfolio Modal -->
-<!-- Modal -->
-<div class="modal fade" id="deletePortfolioModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="deletePortfolioModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">

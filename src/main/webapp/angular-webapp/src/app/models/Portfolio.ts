@@ -8,6 +8,7 @@ export class Portfolio{
   deals: number[]; //ids of deals in the portfolio
   user_referenced_id: number;
   current_portfolio_value: number;
+  cash: number;
 
 
   constructor(name: string, initialInvestment: number, user_referenced_id: number) {

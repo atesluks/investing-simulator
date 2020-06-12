@@ -1,0 +1,36 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="#">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{thePortfolio.name}}</li>
+  </ol>
+</nav>
+
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <nav class="navbar navbar-dark bg-dark">
+        <span class="navbar-brand mb-0 h1">{{thePortfolio.name}} | {{thePortfolio.current_portfolio_value}}
+          | *return*</span>
+      </nav>
+
+      <br>
+      <h6> *Here will be graph* </h6>
+      <br>
+
+      <ul class="list-group">
+        <li class="list-group-item active">Assets</li>
+        <li class="list-group-item"> Stock
+          <button type="button" class="btn btn-danger">SELL</button>
+        </li>
+      </ul>
+
+    </div>
+    <div class="col">
+      <app-all-stocks-list
+      (buyStockEvent)="buyStockEventHandler($event)"
+      ></app-all-stocks-list>
+    </div>
+  </div>
+</div>
+
+
