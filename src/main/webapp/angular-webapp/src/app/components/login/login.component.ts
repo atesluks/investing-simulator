@@ -56,6 +56,8 @@ export class LoginComponent implements OnInit {
 
   }
 
+
+
   changeAlert(alertType:string, alertText:string){
     this.alertFadeShow = "show";
     this.alertType = alertType;
@@ -65,6 +67,8 @@ export class LoginComponent implements OnInit {
   hideAlert(){
     this.alertFadeShow = "fade";
   }
+
+
 
 
 }

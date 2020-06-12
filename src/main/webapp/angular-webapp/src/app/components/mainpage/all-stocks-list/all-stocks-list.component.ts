@@ -9,12 +9,22 @@ import {FinancialsService} from "../../../services/financials.service";
 })
 export class AllStocksListComponent implements OnInit {
 
-  allStocks: Stock[];
+  private allStocks: Map<String, Stock>;
 
-  constructor(private financialsService: FinancialsService) { }
+  constructor(private financialsService: FinancialsService) {
+    this.allStocks = new Map<String, Stock>();
+  }
 
   ngOnInit() {
+    this.financialsService.getAllStocks().subscribe(result=>{
 
+      let map = new Map<string, Stock>();
+      for (var value in result) {
+        map.set(value,result[value])
+      }
+
+      this.allStocks = map;
+    });
   }
 
 }

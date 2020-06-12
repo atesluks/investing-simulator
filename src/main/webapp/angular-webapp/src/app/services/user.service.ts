@@ -3,6 +3,7 @@ import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
 import {User} from "../models/User";
 import {Observable, throwError, of} from "rxjs";
 import {catchError, map, retry, tap} from "rxjs/operators";
+import {Portfolio} from "../models/Portfolio";
 
 @Injectable({
   providedIn: 'root'
@@ -38,6 +39,46 @@ export class UserService {
           console.log(`${outcome} user`);
         }),
         catchError(this.handleError<User>(`login email=${user.email}`)));
+  }
+
+  getUser(id: number){
+    return this.http.get<User>(this.BASE_URL + "/users/"+id, this.httpOptions)
+      .pipe(
+        tap(h => {
+          const outcome = h ? `fetched` : `did not find`;
+          console.log(`${outcome} user`);
+        }),
+        catchError(this.handleError<User>(`get user by id, id=${id}`)));
+  }
+
+  getPortfolio(id: number): Observable<Portfolio>{
+    return this.http.get<Portfolio>(this.BASE_URL + "/portfolios/"+id, this.httpOptions)
+      .pipe(
+        tap(h => {
+          const outcome = h ? `fetched` : `did not find`;
+          console.log(`${outcome} portfolio`);
+        }),
+        catchError(this.handleError<Portfolio>(`getPortfolio id=${id}`)));
+  }
+
+  saveNewPortfolio(newPortfolio: Portfolio): Observable<Portfolio>{
+    return this.http.post<Portfolio>(this.BASE_URL + "/portfolios", newPortfolio, this.httpOptions)
+      .pipe(
+        tap(h => {
+          const outcome = h ? `fetched` : `did not find`;
+          console.log(`${outcome} portfolio`);
+        }),
+        catchError(this.handleError<Portfolio>(`saveNewPortfolio portfolioName=${newPortfolio.name}`)));
+  }
+
+  deletePortfolio(portfolioId: number): Observable<string>{
+    return this.http.delete<string>(this.BASE_URL + "/portfolios/"+portfolioId, this.httpOptions)
+      .pipe(
+        tap(h => {
+          const outcome = h ? `deleted` : `did not delete`;
+          console.log(`${outcome} portfolio`);
+        }),
+        catchError(this.handleError<string>(`deletePortfolio portfolioId=${portfolioId}`)));
   }
 
   private handleError<T>(operation = 'operation', result?: T) {

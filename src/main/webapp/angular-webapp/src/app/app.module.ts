@@ -14,6 +14,7 @@ import { AllStocksListComponent } from './components/mainpage/all-stocks-list/al
 import { GraphComponent } from './components/mainpage/graph/graph.component';
 import { LatestDealsComponent } from './components/mainpage/latest-deals/latest-deals.component';
 import {FormsModule} from "@angular/forms";
+import {FinancialsService} from "./services/financials.service";
 
 const appRoutes: Routes = [
   {path:'', component:MainpageComponent},
@@ -39,7 +40,8 @@ const appRoutes: Routes = [
     HttpClientModule,
     FormsModule
   ],
-  providers: [UserService],
+  providers: [UserService,
+              FinancialsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

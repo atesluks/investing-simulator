@@ -35,7 +35,7 @@ public class FinancialApi {
     private LocalDateTime lastBlockedRequestTime;
 
     //for testing/auditing
-    private Map<String, String> testPrices;
+    private Map<String, Long> testPrices;
 
 
     public FinancialApi() {
@@ -90,12 +90,13 @@ public class FinancialApi {
     }
 
     private void processResponse(String output, String symbol){
+        //System.out.println("Response: "+output.replace('\n', ' '));
         priorityQueue.remove(symbol);
         try{
             JSONObject jsonObject = new JSONObject(output);
             JSONObject quote = jsonObject.getJSONObject("Global Quote");
             StockInfo stockInfo = stocks.get(symbol);
-            stockInfo.setPrice(quote.getString("05. price"));
+            stockInfo.setPrice((long)Double.parseDouble(quote.getString("05. price")));
             stockInfo.setDailyChangePercents(quote.getString("10. change percent"));
             stockInfo.setLastUpdated(LocalDateTime.now());
 
@@ -106,6 +107,7 @@ public class FinancialApi {
                 System.out.println("All stocks updated. Next update will be in an hour");
         }catch(Exception e){
             System.out.println("\t\t*API got blocked for the symbol "+symbol+". Will retry a bit later... ");
+            //System.out.println("Error: "+e);
             long timeDifference = lastBlockedRequestTime.until(LocalDateTime.now(), SECONDS);
             if (timeDifference>30)
                 lastBlockedRequestTime = LocalDateTime.now();

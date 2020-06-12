@@ -6,7 +6,7 @@ public class StockInfo {
 
     private String companyName;
     private String symbol;
-    private String price;
+    private Long price;
     private String dailyChangePercents;
     private String exchange;
     private LocalDateTime lastUpdated;
@@ -14,7 +14,7 @@ public class StockInfo {
     public StockInfo() {
     }
 
-    public StockInfo(String companyName, String symbol, String price, String dailyChangePercents, String exchange, LocalDateTime lastUpdated) {
+    public StockInfo(String companyName, String symbol, Long price, String dailyChangePercents, String exchange, LocalDateTime lastUpdated) {
         this.companyName = companyName;
         this.symbol = symbol;
         this.price = price;
@@ -39,11 +39,11 @@ public class StockInfo {
         this.symbol = symbol;
     }
 
-    public String getPrice() {
+    public Long getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(Long price) {
         this.price = price;
     }
 
@@ -52,7 +52,12 @@ public class StockInfo {
     }
 
     public void setDailyChangePercents(String dailyChangePercents) {
-        this.dailyChangePercents = dailyChangePercents;
+        double change = Double.parseDouble(dailyChangePercents.substring(0, dailyChangePercents.length()-1));
+        change = round(change, 1);
+        if (change>0)
+            this.dailyChangePercents = "+"+change+"%";
+        else
+            this.dailyChangePercents = change+"%";
     }
 
     public String getExchange() {
@@ -82,4 +87,14 @@ public class StockInfo {
                 ", lastUpdated=" + lastUpdated +
                 '}';
     }
+
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        long factor = (long) Math.pow(10, places);
+        value = value * factor;
+        long tmp = Math.round(value);
+        return (double) tmp / factor;
+    }
+
 }

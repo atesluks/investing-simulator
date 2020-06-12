@@ -1,1 +1,6 @@
-<p>all-stocks-list works!</p>
+<ul class="list-group">
+  <li class="list-group-item active">Stocks</li>
+  <div *ngFor="let stock of allStocks.values()">
+    <li class="list-group-item">{{stock.symbol}} | {{stock.price}} | {{stock.dailyChangePercents}}</li>
+  </div>
+</ul>

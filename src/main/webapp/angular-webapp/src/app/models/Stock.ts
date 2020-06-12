@@ -1,10 +1,10 @@
 export class Stock{
 
-  private companyName: string;
-  private symbol: string;
-  private price: string;
-  private dailyChangePercents: string;
-  private exchange: string;
-  private lastUpdated: string;
+  companyName: string;
+  symbol: string;
+  price: string;
+  dailyChangePercents: string;
+  exchange: string;
+  lastUpdated: string;
 
 }

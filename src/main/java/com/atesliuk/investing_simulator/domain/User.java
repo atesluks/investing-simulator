@@ -1,8 +1,6 @@
 package com.atesliuk.investing_simulator.domain;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -27,6 +25,7 @@ public class User {
     private String lastName;
 
     @Column(name = "password")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
@@ -83,6 +82,7 @@ public class User {
         return lastName;
     }
 
+    @JsonIgnore
     public String getPassword() {
         return password;
     }
