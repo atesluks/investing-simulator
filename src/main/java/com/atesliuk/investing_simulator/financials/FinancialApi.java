@@ -26,6 +26,8 @@ public class FinancialApi {
     //20 stocks -> each stock is updated 25 times per day
     //Each stock is updated ~once per hour
 
+    public static List<String> allStockSymbols;
+
     private final String BASE_URL = "https://www.alphavantage.co/query?";
     private final String API_KEY="S8A9YDO8RF1BSB8W";
 
@@ -139,6 +141,7 @@ public class FinancialApi {
 
     private void prepareListOfStocks(){
         stocks = new HashMap<>();
+        allStockSymbols = new ArrayList<>();
 
         String output= "";
         try{
@@ -161,6 +164,7 @@ public class FinancialApi {
             stock.setExchange(jo.getString("exchange"));
 
             stocks.put(stock.getSymbol(), stock);
+            allStockSymbols.add(stock.getSymbol());
         }
     }
 
