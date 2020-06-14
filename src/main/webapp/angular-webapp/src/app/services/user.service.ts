@@ -4,6 +4,7 @@ import {User} from "../models/User";
 import {Observable, throwError, of} from "rxjs";
 import {catchError, map, retry, tap} from "rxjs/operators";
 import {Portfolio} from "../models/Portfolio";
+import {Deal} from "../models/Deal";
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +27,7 @@ export class UserService {
         //map(users => users[0]), // returns a {0|1} element array
         tap(h => {
           const outcome = h ? `fetched` : `did not find`;
-          console.log(`${outcome} user`);
+          console.log(`UserService.login(): ${outcome} user`);
         }),
         catchError(this.handleError<User>(`login email=${credentials[0]}`)));
   }
@@ -36,7 +37,7 @@ export class UserService {
       .pipe(
         tap(h => {
           const outcome = h ? `fetched` : `did not find`;
-          console.log(`${outcome} user`);
+          console.log(`userService.signup(): ${outcome} user`);
         }),
         catchError(this.handleError<User>(`login email=${user.email}`)));
   }
@@ -46,7 +47,7 @@ export class UserService {
       .pipe(
         tap(h => {
           const outcome = h ? `fetched` : `did not find`;
-          console.log(`${outcome} user`);
+          console.log(`userService.getUser(): ${outcome} user`);
         }),
         catchError(this.handleError<User>(`get user by id, id=${id}`)));
   }
@@ -56,7 +57,7 @@ export class UserService {
       .pipe(
         tap(h => {
           const outcome = h ? `fetched` : `did not find`;
-          console.log(`${outcome} portfolio`);
+          console.log(`userService.getPortfolio(): ${outcome} portfolio`);
         }),
         catchError(this.handleError<Portfolio>(`getPortfolio id=${id}`)));
   }
@@ -66,7 +67,7 @@ export class UserService {
       .pipe(
         tap(h => {
           const outcome = h ? `fetched` : `did not find`;
-          console.log(`${outcome} portfolio`);
+          console.log(`userService.saveNewPortfolio(): ${outcome} portfolio`);
         }),
         catchError(this.handleError<Portfolio>(`saveNewPortfolio portfolioName=${newPortfolio.name}`)));
   }
@@ -76,9 +77,39 @@ export class UserService {
       .pipe(
         tap(h => {
           const outcome = h ? `deleted` : `did not delete`;
-          console.log(`${outcome} portfolio`);
+          console.log(`userService.deletePortfolio(): ${outcome} portfolio`);
         }),
         catchError(this.handleError<string>(`deletePortfolio portfolioId=${portfolioId}`)));
+  }
+
+  getDeal(dealId: number): Observable<Deal>{
+    return this.http.get<Deal>(this.BASE_URL + "/deals/"+dealId, this.httpOptions)
+      .pipe(
+        tap(h => {
+          const outcome = h ? `found` : `did not find`;
+          console.log(`userService.getDeal(): ${outcome} deal`);
+        }),
+        catchError(this.handleError<Deal>(`getDeal dealId=${dealId}`)));
+  }
+
+  addDeal(theDeal: Deal): Observable<Deal>{
+    return this.http.post<Deal>(this.BASE_URL + "/deals", theDeal, this.httpOptions)
+      .pipe(
+        tap(h => {
+          const outcome = h ? `added` : `did not add`;
+          console.log(`userService.addDeal(): ${outcome} deal`);
+        }),
+        catchError(this.handleError<Deal>(`addDeal dealId=${theDeal.id}`)));
+  }
+
+  closeDeal(dealId: number): Observable<Deal>{
+    return this.http.put<Deal>(this.BASE_URL + "/deals/"+dealId, this.httpOptions)
+      .pipe(
+        tap(h => {
+          const outcome = h ? `closed` : `did not close`;
+          console.log(`userService.closeDeal(): ${outcome} deal`);
+        }),
+        catchError(this.handleError<Deal>(`closeDeal dealId=${dealId}`)));
   }
 
   private handleError<T>(operation = 'operation', result?: T) {

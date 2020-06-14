@@ -1,38 +1,41 @@
 package com.atesliuk.investing_simulator.domain;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "deal")
 public class Deal implements Comparable{
-
-    public static final String ACTION_BUY="BUY";
-    public static final String ACTION_SELL="SELL";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "action")
-    private String action;
-
-    @Column(name = "ticker")
-    private String ticker;
+    @Column(name = "stock_symbol")
+    private String stockSymbol;
 
     @Column(name = "amount")
     private Integer amount;
 
-    @Column(name = "date")
-    private LocalDate date;
+    @Column(name = "open_date")
+    private LocalDateTime openDate;
 
-    @Column(name = "profit")
-    private Long profit;
+    @Column(name = "closing_date")
+    private LocalDateTime closingDate;
+
+    @Column(name = "open_price")
+    private Double openPrice;
+
+    @Column(name = "closing_price")
+    private Double closingPrice;
+
+    //this variable helps when making a POST request for saving a deal to reference a portfolio
+    @Transient
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Long portfolio_referenced_id;
 
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @JsonIdentityReference(alwaysAsId = true)
@@ -44,12 +47,13 @@ public class Deal implements Comparable{
     public Deal() {
     }
 
-    public Deal(String action, String ticker, Integer amount, LocalDate date, Long profit, Portfolio portfolio) {
-        this.action = action;
-        this.ticker = ticker;
+    public Deal(String stockSymbol, Integer amount, LocalDateTime openDate, LocalDateTime closingDate, Double openPrice, Double closingPrice, Portfolio portfolio) {
+        this.stockSymbol = stockSymbol;
         this.amount = amount;
-        this.date = date;
-        this.profit = profit;
+        this.openDate = openDate;
+        this.closingDate = closingDate;
+        this.openPrice = openPrice;
+        this.closingPrice = closingPrice;
         this.portfolio = portfolio;
     }
 
@@ -61,20 +65,12 @@ public class Deal implements Comparable{
         this.id = id;
     }
 
-    public String getAction() {
-        return action;
+    public String getStockSymbol() {
+        return stockSymbol;
     }
 
-    public void setAction(String action) {
-        this.action = action;
-    }
-
-    public String getTicker() {
-        return ticker;
-    }
-
-    public void setTicker(String ticker) {
-        this.ticker = ticker;
+    public void setStockSymbol(String stockSymbol) {
+        this.stockSymbol = stockSymbol;
     }
 
     public Integer getAmount() {
@@ -85,20 +81,36 @@ public class Deal implements Comparable{
         this.amount = amount;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public LocalDateTime getOpenDate() {
+        return openDate;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setOpenDate(LocalDateTime openDate) {
+        this.openDate = openDate;
     }
 
-    public Long getProfit() {
-        return profit;
+    public LocalDateTime getClosingDate() {
+        return closingDate;
     }
 
-    public void setProfit(Long profit) {
-        this.profit = profit;
+    public void setClosingDate(LocalDateTime closingDate) {
+        this.closingDate = closingDate;
+    }
+
+    public Double getOpenPrice() {
+        return openPrice;
+    }
+
+    public void setOpenPrice(Double openPrice) {
+        this.openPrice = openPrice;
+    }
+
+    public Double getClosingPrice() {
+        return closingPrice;
+    }
+
+    public void setClosingPrice(Double closingPrice) {
+        this.closingPrice = closingPrice;
     }
 
     public Portfolio getPortfolio() {
@@ -109,11 +121,31 @@ public class Deal implements Comparable{
         this.portfolio = portfolio;
     }
 
+    @JsonIgnore
+    public Long getPortfolio_referenced_id() {
+        return portfolio_referenced_id;
+    }
+
+    @JsonIgnore
+    public void setPortfolio_referenced_id(Long portfolio_referenced_id) {
+        this.portfolio_referenced_id = portfolio_referenced_id;
+    }
+
     @Override
     public int compareTo(Object o) {
         if (o instanceof Deal){
-            Deal d = (Deal) o;
-            return this.date.compareTo(d.date);
+            //if both are not closed
+            if (this.closingDate != null && ((Deal) o).closingDate!=null){
+                return this.openDate.compareTo(((Deal) o).openDate);
+            //if this deal is closed and compared deal is not closed
+            }else if (this.closingDate != null & ((Deal) o).closingDate==null){
+                return -1;
+            //if this deal is not closed and compared deal is closed
+            }else if (this.closingDate == null && ((Deal) o).closingDate!= null){
+                return 1;
+            }else{
+                return this.closingDate.compareTo(((Deal) o).closingDate);
+            }
         }
         return 0;
     }

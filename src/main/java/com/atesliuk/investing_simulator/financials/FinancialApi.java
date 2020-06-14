@@ -26,18 +26,16 @@ public class FinancialApi {
     //20 stocks -> each stock is updated 25 times per day
     //Each stock is updated ~once per hour
 
-    public static List<String> allStockSymbols;
-
     private final String BASE_URL = "https://www.alphavantage.co/query?";
     private final String API_KEY="S8A9YDO8RF1BSB8W";
 
-    private Map<String, StockInfo> stocks;
+    public static Map<String, StockInfo> stocks;
     private List<String> priorityQueue;
     private boolean keepUpdating;
     private LocalDateTime lastBlockedRequestTime;
 
     //for testing/auditing
-    private Map<String, Long> testPrices;
+    private Map<String, Double> testPrices;
 
 
     public FinancialApi() {
@@ -98,7 +96,7 @@ public class FinancialApi {
             JSONObject jsonObject = new JSONObject(output);
             JSONObject quote = jsonObject.getJSONObject("Global Quote");
             StockInfo stockInfo = stocks.get(symbol);
-            stockInfo.setPrice((long)Double.parseDouble(quote.getString("05. price")));
+            stockInfo.setPrice(Double.parseDouble(quote.getString("05. price")));
             stockInfo.setDailyChangePercents(quote.getString("10. change percent"));
             stockInfo.setLastUpdated(LocalDateTime.now());
 
@@ -141,7 +139,6 @@ public class FinancialApi {
 
     private void prepareListOfStocks(){
         stocks = new HashMap<>();
-        allStockSymbols = new ArrayList<>();
 
         String output= "";
         try{
@@ -164,7 +161,6 @@ public class FinancialApi {
             stock.setExchange(jo.getString("exchange"));
 
             stocks.put(stock.getSymbol(), stock);
-            allStockSymbols.add(stock.getSymbol());
         }
     }
 

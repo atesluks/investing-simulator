@@ -64,11 +64,4 @@ export class LoginComponent implements OnInit {
     this.alertText = alertText;
   }
 
-  hideAlert(){
-    this.alertFadeShow = "fade";
-  }
-
-
-
-
 }

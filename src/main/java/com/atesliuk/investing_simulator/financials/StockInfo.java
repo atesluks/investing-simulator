@@ -6,7 +6,7 @@ public class StockInfo {
 
     private String companyName;
     private String symbol;
-    private Long price;
+    private Double price;
     private String dailyChangePercents;
     private String exchange;
     private LocalDateTime lastUpdated;
@@ -14,7 +14,7 @@ public class StockInfo {
     public StockInfo() {
     }
 
-    public StockInfo(String companyName, String symbol, Long price, String dailyChangePercents, String exchange, LocalDateTime lastUpdated) {
+    public StockInfo(String companyName, String symbol, Double price, String dailyChangePercents, String exchange, LocalDateTime lastUpdated) {
         this.companyName = companyName;
         this.symbol = symbol;
         this.price = price;
@@ -39,11 +39,11 @@ public class StockInfo {
         this.symbol = symbol;
     }
 
-    public Long getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(Long price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

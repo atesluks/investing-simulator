@@ -7,4 +7,9 @@ export class Stock{
   exchange: string;
   lastUpdated: string;
 
+
+  constructor(companyName: string, price: string) {
+    this.companyName = companyName;
+    this.price = price;
+  }
 }

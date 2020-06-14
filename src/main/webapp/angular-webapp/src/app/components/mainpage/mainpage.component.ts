@@ -14,34 +14,13 @@ export class MainpageComponent implements OnInit {
 
   private theUser: User;
 
-  constructor(private userService: UserService,
-              private router: Router) {
-
-    this.theUser = JSON.parse(Cookie.get('user'));
-
-    if (this.theUser == undefined) {
-      this.router.navigate(['/login']);
-    }
-
-    this.updateUser(this.theUser.id);
+  constructor() {
   }
 
   ngOnInit() {
 
   }
 
-  updateUser(id: number){
-    this.userService.getUser(id).subscribe((result: User) => {
-      if (result==undefined){
-        Cookie.set('user',undefined);
-        this.router.navigate(['/login']);
-      }else{
-        Cookie.set('user',JSON.stringify(result));
-        this.theUser = result;
-      }
-
-    });
-  }
 
 
 }

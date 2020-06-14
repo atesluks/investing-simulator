@@ -14,7 +14,7 @@
 
       <div class="alert {{this.alertType}} alert-dismissible collapse {{this.alertFadeShow}}" role="alert">
         {{this.alertText}}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="this.hideAlert()">
+        <button type="button" class="close" aria-label="Close" (click)="this.alertFadeShow='fade'">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>

@@ -1,22 +1,17 @@
 package com.atesliuk.investing_simulator.domain;
 
+import com.atesliuk.investing_simulator.financials.FinancialApi;
 import com.atesliuk.investing_simulator.financials.StockInfo;
-import com.atesliuk.investing_simulator.service.FinancialsService;
 import com.fasterxml.jackson.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "portfolios")
 public class Portfolio {
-
-    @Autowired
-    @Transient
-    private FinancialsService financialsService;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,14 +22,14 @@ public class Portfolio {
     private String name;
 
     @Column(name = "date_of_creation")
-    private LocalDate dateOfCreation;
+    private LocalDateTime dateOfCreation;
 
     @Column(name = "initial_investment")
-    private Long initialInvestment;
+    private Double initialInvestment;
 
     @Column(name = "cash")
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Long cash;
+    private Double cash;
 
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @JsonIdentityReference(alwaysAsId = true)
@@ -45,14 +40,7 @@ public class Portfolio {
 
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @JsonIdentityReference(alwaysAsId = true)
-    @OneToMany(mappedBy = "portfolio", cascade = {CascadeType.PERSIST, CascadeType.DETACH,
-            CascadeType.MERGE, CascadeType.REFRESH})
-    private List<PortfolioStock> portfolioStocks;
-
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-    @JsonIdentityReference(alwaysAsId = true)
-    @OneToMany(mappedBy = "portfolio", cascade = {CascadeType.PERSIST, CascadeType.DETACH,
-            CascadeType.MERGE, CascadeType.REFRESH})
+    @OneToMany(mappedBy = "portfolio", cascade = {CascadeType.ALL})
     private List<Deal> deals;
 
     //this variable helps when making a POST request for saving a portfolio to reference a user
@@ -62,18 +50,20 @@ public class Portfolio {
 
     @Transient
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Long current_portfolio_value;
+    private Double current_portfolio_value;
 
     public Portfolio() {
     }
 
-    public Portfolio(String name, LocalDate dateOfCreation, Long initialInvestment, User user) {
+    public Portfolio(String name, LocalDateTime dateOfCreation, Double initialInvestment, Double cash, User user, List<Deal> deals, Long user_referenced_id, Double current_portfolio_value) {
         this.name = name;
         this.dateOfCreation = dateOfCreation;
         this.initialInvestment = initialInvestment;
+        this.cash = cash;
         this.user = user;
-        this.portfolioStocks = new ArrayList<>();
-        this.deals = new ArrayList<>();
+        this.deals = deals;
+        this.user_referenced_id = user_referenced_id;
+        this.current_portfolio_value = current_portfolio_value;
     }
 
     public Long getId() {
@@ -92,19 +82,19 @@ public class Portfolio {
         this.name = name;
     }
 
-    public LocalDate getDateOfCreation() {
+    public LocalDateTime getDateOfCreation() {
         return dateOfCreation;
     }
 
-    public void setDateOfCreation(LocalDate dateOfCreation) {
+    public void setDateOfCreation(LocalDateTime dateOfCreation) {
         this.dateOfCreation = dateOfCreation;
     }
 
-    public Long getInitialInvestment() {
+    public Double getInitialInvestment() {
         return initialInvestment;
     }
 
-    public void setInitialInvestment(Long initialInvestment) {
+    public void setInitialInvestment(Double initialInvestment) {
         this.initialInvestment = initialInvestment;
     }
 
@@ -114,14 +104,6 @@ public class Portfolio {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public List<PortfolioStock> getPortfolioStocks() {
-        return portfolioStocks;
-    }
-
-    public void setPortfolioStocks(List<PortfolioStock> portfolioStocks) {
-        this.portfolioStocks = portfolioStocks;
     }
 
     public List<Deal> getDeals() {
@@ -142,28 +124,21 @@ public class Portfolio {
         this.user_referenced_id = user_id;
     }
 
-    public Long getCurrent_portfolio_value() {
+    public Double getCurrent_portfolio_value() {
         this.current_portfolio_value = calculatePortfolioValue();
         return current_portfolio_value;
     }
 
-    public void setCurrent_portfolio_value(Long current_portfolio_value) {
+    public void setCurrent_portfolio_value(Double current_portfolio_value) {
         this.current_portfolio_value = current_portfolio_value;
     }
 
-    public Long getCash() {
+    public Double getCash() {
         return cash;
     }
 
-    public void setCash(Long cash) {
+    public void setCash(Double cash) {
         this.cash = cash;
-    }
-
-    public void addStock(PortfolioStock thePortfolioStock) {
-        if (portfolioStocks == null) {
-            portfolioStocks = new ArrayList<>();
-        }
-        portfolioStocks.add(thePortfolioStock);
     }
 
     public void addDeal(Deal theDeal) {
@@ -182,29 +157,28 @@ public class Portfolio {
                 ", initialInvestment=" + initialInvestment +
                 ", cash=" + cash +
                 ", user=" + user +
-                (portfolioStocks==null ? "" : ", portfolioStocks="+ portfolioStocks)  +
                 (deals == null ? "" : ", deals=" + deals) +
                 ", user_referenced_id=" + user_referenced_id +
                 ", current_portfolio_value=" + current_portfolio_value +
                 '}';
     }
 
-    private Long calculatePortfolioValue() {
-        Long total_value = this.getCash();
-        try{
-            List<PortfolioStock> portfolioStocks = this.getPortfolioStocks();
-            if (portfolioStocks == null || financialsService == null || portfolioStocks.size() == 0) return total_value;
-            for (PortfolioStock stock : this.getPortfolioStocks()) {
-                String symbol = stock.getTicker();
-                StockInfo stockInfo = financialsService.getAllStockQuotes().get(symbol);
-                total_value += stock.getAmount() * stockInfo.getPrice();
+    private Double calculatePortfolioValue() {
+        Double totalValue = this.getCash();
+
+        for (Deal deal : deals) {
+            //if the deal is closed, then we won't count its value, because its already in the cash
+            if (deal.getClosingDate()!=null)
+                continue;
+            StockInfo stock = FinancialApi.stocks.get(deal.getStockSymbol());
+            if (stock.getPrice() != null) {
+                totalValue +=deal.getAmount() * stock.getPrice();
+            } else {
+                System.err.println("Portfolio value for portfolio " + id + " is incorrect because not all stock quotes were retrieved yet. " +
+                        "Try again later.");
             }
-            return total_value;
-        }catch(Exception e){
-            System.out.println("Portfolio.calculatePortfolioValie() exception: "+e);
-            e.printStackTrace();
         }
-        return total_value;
+        return totalValue;
     }
 
 }

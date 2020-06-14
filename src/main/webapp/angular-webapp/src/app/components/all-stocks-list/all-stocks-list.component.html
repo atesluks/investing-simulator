@@ -4,8 +4,8 @@
   <div *ngFor="let stock of allStocks.values()">
     <li class="list-group-item">{{stock.symbol}} | {{stock.price}} | {{stock.dailyChangePercents}}
 
-      <button type="button" class="btn btn-primary {{showBuySellButtons}}" data-toggle="modal" data-target="#buyStockModal"
-              (click)="this.selectedStock = stock">BUY</button>
+      <button type="button" class="btn btn-success {{showBuySellButtons}}" data-toggle="modal" data-target="#buyStockModal"
+              (click)="this.selectedStock = stock" [disabled]="buttonDisabled">BUY</button>
 
     </li>
   </div>

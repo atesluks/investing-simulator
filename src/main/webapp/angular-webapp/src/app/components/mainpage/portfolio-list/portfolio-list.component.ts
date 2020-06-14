@@ -25,9 +25,14 @@ export class PortfolioListComponent implements OnInit {
 
   ngOnInit() {
     this.theUser = JSON.parse(Cookie.get('user'));
-    this.getPortfolios();
+
+    if (this.theUser == undefined) {
+      this.router.navigate(['/login']);
+    }
+    this.updateUser(this.theUser.id);
+
     this.createPortfolioAlertHideShow = "fade";
-    this.createPortfolioAlertText = "Portfolio with this name already exists! Chose another name!";
+    this.createPortfolioAlertText = "";
     this.createPortfolioAlertType = "alert-danger";
     this.spinnerFadeShow= "fade";
     this.portfolioToDelete = new Portfolio("",0,0);
@@ -37,22 +42,9 @@ export class PortfolioListComponent implements OnInit {
     let ids = this.theUser.portfolios;
     this.allPortfolios = new Array<Portfolio>();
 
-    console.log("User:");
-    console.log(this.theUser);
-
-    console.log("Ids:");
-    console.log(ids);
-
     ids.forEach((id) => {
       this.userService.getPortfolio(id).subscribe((portfolio: Portfolio)=> {
-        console.log(`portfolio-list returned portfolio (id=${id}):`);
-        console.log(portfolio);
-
         this.allPortfolios.push(portfolio);
-
-        console.log("protfolio list:");
-        console.log(this.allPortfolios);
-
       });
     });
 
@@ -66,13 +58,7 @@ export class PortfolioListComponent implements OnInit {
     let investmentNumber = +initialInvestment;
     let newPortfolio = new Portfolio(name, investmentNumber, this.theUser.id);
 
-    console.log("New portfolio:");
-    console.log(newPortfolio);
-
     this.userService.saveNewPortfolio(newPortfolio).subscribe((result: Portfolio)=>{
-
-      console.log("SavePortfolio returned portfolio:");
-      console.log(result);
 
       this.spinnerFadeShow = 'fade';
 
@@ -101,8 +87,11 @@ export class PortfolioListComponent implements OnInit {
         this.theUser = result;
         this.getPortfolios();
 
+        console.log("PortfolioList. Updating user. Updated, putted in cookies. Cookies:");
+        console.log(JSON.parse(Cookie.get('user')));
+
         this.spinnerFadeShow = 'fade';
-        //closing the modal window
+        //closing the modal windows if opened
         document.getElementById("closeModalButton").click();
         document.getElementById("closeDeleteModal").click();
       }
@@ -112,8 +101,6 @@ export class PortfolioListComponent implements OnInit {
 
   deletePortfolio(portfolio: Portfolio){
     this.userService.deletePortfolio(portfolio.id).subscribe((result: string) => {
-      console.log("Response of the deletePortfolio method:");
-      console.log(result);
       this.updateUser(this.theUser.id);
     });
   }

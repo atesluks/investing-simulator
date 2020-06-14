@@ -1,20 +1,19 @@
-export class Portfolio{
+export class Deal{
+
   id:number;
-  action: string;
-  ticker: string;
+  stockSymbol: string;
   amount: number;
-  date: string;
-  profit: number;
+  openPrice: number;
+  closingPrice: number;
+  openDate: string;
+  closingDate: string;
+  portfolio_referenced_id: number;
   portfolio: number; //id of a portfolio
 
 
-  constructor(id: number, action: string, ticker: string, amount: number, date: string, profit: number, portfolio: number) {
-    this.id = id;
-    this.action = action;
-    this.ticker = ticker;
+  constructor(stockSymbol: string, amount: number, portfolio_referenced_id: number) {
+    this.stockSymbol = stockSymbol;
     this.amount = amount;
-    this.date = date;
-    this.profit = profit;
-    this.portfolio = portfolio;
+    this.portfolio_referenced_id = portfolio_referenced_id;
   }
 }

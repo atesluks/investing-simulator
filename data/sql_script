@@ -50,35 +50,18 @@ CREATE TABLE `portfolios` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Creating a table called 'stocks'
---
-
-DROP TABLE IF EXISTS `stocks`;
-CREATE TABLE `stocks` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `amount` int(12) NOT NULL,
-  `ticker` varchar(10) NOT NULL,
-  `portfolio_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FK_PORTFOLIO_idx` (`portfolio_id`),
-  CONSTRAINT `FK_PORTFOLIO`
-  FOREIGN KEY(`portfolio_id`)
-  REFERENCES `portfolios` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
 -- Creating a table called 'deal'
 --
 
 DROP TABLE IF EXISTS `deal`;
 CREATE TABLE `deal` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `action` varchar(4) NOT NULL,
-  `ticker` varchar(10) NOT NULL,
-  `stock_price` DECIMAL(12,2) NOT NULL,
+  `stock_symbol` varchar(10) NOT NULL,
+  `open_price` DECIMAL(12,2) NOT NULL,
+  `closing_price` DECIMAL(12,2),
   `amount` int(12) NOT NULL,
-  `date` DATETIME NOT NULL,
-  `profit` DECIMAL(12,2) DEFAULT NULL,
+  `open_date` DATETIME NOT NULL,
+  `closing_date` DATETIME,
   `portfolio_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_PORTFOLIO_idx` (`portfolio_id`),

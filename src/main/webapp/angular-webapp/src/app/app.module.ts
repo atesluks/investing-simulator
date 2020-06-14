@@ -10,7 +10,7 @@ import { SignupComponent } from './components/signup/signup.component';
 import {UserService} from "./services/user.service";
 import { MainpageComponent } from './components/mainpage/mainpage.component';
 import { PortfolioListComponent } from './components/mainpage/portfolio-list/portfolio-list.component';
-import { AllStocksListComponent } from './components/mainpage/all-stocks-list/all-stocks-list.component';
+import { AllStocksListComponent } from './components/all-stocks-list/all-stocks-list.component';
 import { GraphComponent } from './components/mainpage/graph/graph.component';
 import { LatestDealsComponent } from './components/mainpage/latest-deals/latest-deals.component';
 import {FormsModule} from "@angular/forms";

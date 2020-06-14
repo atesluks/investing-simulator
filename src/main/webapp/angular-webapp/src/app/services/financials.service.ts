@@ -25,7 +25,7 @@ export class FinancialsService {
         retry(3),
         tap(h => {
           const outcome = h ? `fetched` : `did not find`;
-          console.log(`${outcome} financials`);
+          console.log(`financialsService.getAllStocks(): ${outcome} financials`);
         }),
         catchError(this.handleError<Map<string, Stock>>(`financials`)));
   }

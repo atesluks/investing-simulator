@@ -27,12 +27,6 @@ public class DealServiceImpl implements DealService {
 
     @Override
     public Deal saveDeal(Deal theDeal) {
-        String action = theDeal.getAction().toUpperCase();
-        if (!action.equals(Deal.ACTION_BUY) && !action.equals(Deal.ACTION_SELL))
-            throw new IllegalArgumentException("Action can be only BUY or SELL!");
-        theDeal.setAction(action);
-        if (action.equals("BUY"))
-            theDeal.setProfit(0L);
         return dealDAO.save(theDeal);
     }
 
