@@ -28,6 +28,7 @@ public class FinancialApi {
 
     private final String BASE_URL = "https://www.alphavantage.co/query?";
     private final String API_KEY="S8A9YDO8RF1BSB8W";
+    //https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=IBM&outputsize=full&apikey=demo
 
     public static Map<String, StockInfo> stocks;
     private List<String> priorityQueue;

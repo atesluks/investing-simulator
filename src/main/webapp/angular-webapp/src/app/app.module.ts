@@ -12,7 +12,6 @@ import { MainpageComponent } from './components/mainpage/mainpage.component';
 import { PortfolioListComponent } from './components/mainpage/portfolio-list/portfolio-list.component';
 import { AllStocksListComponent } from './components/all-stocks-list/all-stocks-list.component';
 import { GraphComponent } from './components/mainpage/graph/graph.component';
-import { LatestDealsComponent } from './components/mainpage/latest-deals/latest-deals.component';
 import {FormsModule} from "@angular/forms";
 import {FinancialsService} from "./services/financials.service";
 import { PortfolioComponent } from './components/portfolio/portfolio.component';
@@ -33,7 +32,6 @@ const appRoutes: Routes = [
     PortfolioListComponent,
     AllStocksListComponent,
     GraphComponent,
-    LatestDealsComponent,
     PortfolioComponent
   ],
   imports: [

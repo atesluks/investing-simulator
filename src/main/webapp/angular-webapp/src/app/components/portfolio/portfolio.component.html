@@ -9,8 +9,8 @@
   <div class="row">
     <div class="col-8">
       <nav class="navbar navbar-dark bg-dark">
-        <span *ngIf="thePortfolio.name!=''" class="navbar-brand mb-0 h1">{{thePortfolio.name}} | current value = {{thePortfolio.current_portfolio_value}}
-          | Cash = {{thePortfolio.cash}} | *returns*</span>
+        <span *ngIf="thePortfolio.name!=''" class="navbar-brand mb-0 h1">{{thePortfolio.name}} | current value: {{thePortfolio.current_portfolio_value}}
+          | Cash: {{thePortfolio.cash}} | Returns: {{(thePortfolio.current_portfolio_value/thePortfolio.initialInvestment - 1)*100}}%</span>
       </nav>
 
       <br>
