@@ -32,18 +32,22 @@ public class FinancialApi {
 
     public static Map<String, StockInfo> stocks;
     private List<String> priorityQueue;
+    private List<String> priorityQueueTimeSeries;
     private boolean keepUpdating;
     private LocalDateTime lastBlockedRequestTime;
 
     //for testing/auditing
     private Map<String, Double> testPrices;
+    private Map<String, String> testTimeSeries;
 
 
     public FinancialApi() {
         prepareListOfStocks();
         priorityQueue = new LinkedList<>();
+        priorityQueueTimeSeries = new LinkedList<>();
         lastBlockedRequestTime = LocalDateTime.now().minusMinutes(5);
         testPrices = new HashMap<>();
+        testTimeSeries = new HashMap<>();
         keepUpdating = true;
         ongoingUpdatingAll();
     }
@@ -84,9 +88,49 @@ public class FinancialApi {
     }
 
     public void updateStockQuotes(Set<String> symbols){
-        Map<String, StockInfo> result = new HashMap<>();
         for (String s : symbols){
             updateStockQuotes(s);
+        }
+    }
+
+    public void updateStockTimeSeries(String symbol){
+        //if a symbol has not been updated yet and is in the queue (on its way to update)
+        //then we will not do that twice, so we return
+        if (priorityQueueTimeSeries.contains(symbol)){
+            return;
+        }
+        else{
+            //if the symbol is not in the queue, then it should be updated
+            priorityQueueTimeSeries.add(symbol);
+        }
+
+        //if there is less than one minute passed since the last API block, we will wait
+        long timeDifference = lastBlockedRequestTime.until(LocalDateTime.now(), SECONDS);
+        if (timeDifference<60){
+            try {
+                TimeUnit.SECONDS.sleep(timeDifference+5);
+            } catch (InterruptedException e) {
+                System.err.println("Something went wrong in FinancialAPI.UpdateStockQuotes(): "+e);
+            }
+        }
+
+        String uri = BASE_URL+"function=TIME_SERIES_DAILY&symbol="+symbol+"&outputsize=full&apikey="+API_KEY;
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(uri))
+                .build();
+
+        client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                .thenApply(x -> {
+                    processResponseTimeSeries(x.body(), symbol);
+                    return x.body();
+                });
+    }
+
+    public void updateStockTimeSeries(Set<String> symbols){
+        for (String s : symbols){
+            updateStockTimeSeries(s);
         }
     }
 
@@ -116,6 +160,45 @@ public class FinancialApi {
         }
     }
 
+    private void processResponseTimeSeries(String output, String symbol){
+        //System.out.println("Response: "+output.replace('\n', ' '));
+        priorityQueue.remove(symbol);
+        try{
+            JSONObject jsonObject = new JSONObject(output).getJSONObject("Time Series (Daily)");
+
+            StockInfo stockInfo = stocks.get(symbol);
+
+            Iterator<String> keys = jsonObject.keys();
+
+            while (keys.hasNext()){
+                String key = keys.next();
+                JSONObject oneDayData = jsonObject.getJSONObject(key);
+                StockTimeSeriesData timeSeriesData = new StockTimeSeriesData();
+
+                timeSeriesData.setDate(key);
+                timeSeriesData.setOpen(Double.parseDouble(oneDayData.getString("1. open")));
+                timeSeriesData.setClose(Double.parseDouble(oneDayData.getString("4. close")));
+                timeSeriesData.setHigh(Double.parseDouble(oneDayData.getString("2. high")));
+                timeSeriesData.setLow(Double.parseDouble(oneDayData.getString("3. low")));
+                timeSeriesData.setVolume(Double.parseDouble(oneDayData.getString("5. volume")));
+
+                stockInfo.getTimeSeries().add(timeSeriesData);
+            }
+
+            System.out.println("------ Time series for "+symbol+" was retrieved successfully!!! The time series queue: "+priorityQueueTimeSeries);
+            testTimeSeries.put(symbol, output.substring(0, 600));
+            System.out.println("------ "+testTimeSeries);
+            if (priorityQueueTimeSeries.isEmpty())
+                System.out.println("Time series data for all stocks is updated. Next update will be in an hour");
+        }catch(Exception e){
+            System.out.println("\t\t*API got blocked for time series for the symbol "+symbol+". Will retry a bit later... ");
+            long timeDifference = lastBlockedRequestTime.until(LocalDateTime.now(), SECONDS);
+            if (timeDifference>30)
+                lastBlockedRequestTime = LocalDateTime.now();
+            updateStockQuotes(symbol);
+        }
+    }
+
     private void ongoingUpdatingAll(){
 
         Thread thread = new Thread(new Runnable() {
@@ -126,6 +209,7 @@ public class FinancialApi {
                     try {
                         System.out.println("\n\n----- BIG PRICE UPDATE! -----");
                         updateStockQuotes(getStocks().keySet());
+                        updateStockTimeSeries(getStocks().keySet());
                         TimeUnit.HOURS.sleep(1);
                     } catch (InterruptedException e) {
                         System.err.println("Something went wrong in FinancialApi.updating all: "+e);

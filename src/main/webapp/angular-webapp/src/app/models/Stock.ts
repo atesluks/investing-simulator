@@ -1,3 +1,5 @@
+import {StockTimeSeries} from "./StockTimeSeries";
+
 export class Stock{
 
   companyName: string;
@@ -6,6 +8,7 @@ export class Stock{
   dailyChangePercents: string;
   exchange: string;
   lastUpdated: string;
+  stockTimeSeries: StockTimeSeries[];
 
 
   constructor(companyName: string, price: string) {

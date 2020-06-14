@@ -1,6 +1,8 @@
 package com.atesliuk.investing_simulator.financials;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class StockInfo {
 
@@ -10,8 +12,10 @@ public class StockInfo {
     private String dailyChangePercents;
     private String exchange;
     private LocalDateTime lastUpdated;
+    private List<StockTimeSeriesData> timeSeries;
 
     public StockInfo() {
+        timeSeries = new ArrayList<>();
     }
 
     public StockInfo(String companyName, String symbol, Double price, String dailyChangePercents, String exchange, LocalDateTime lastUpdated) {
@@ -21,6 +25,7 @@ public class StockInfo {
         this.dailyChangePercents = dailyChangePercents;
         this.exchange = exchange;
         this.lastUpdated = lastUpdated;
+        timeSeries = new ArrayList<>();
     }
 
     public String getCompanyName() {
@@ -49,6 +54,14 @@ public class StockInfo {
 
     public String getDailyChangePercents() {
         return dailyChangePercents;
+    }
+
+    public List<StockTimeSeriesData> getTimeSeries() {
+        return timeSeries;
+    }
+
+    public void setTimeSeries(List<StockTimeSeriesData> timeSeries) {
+        this.timeSeries = timeSeries;
     }
 
     public void setDailyChangePercents(String dailyChangePercents) {
