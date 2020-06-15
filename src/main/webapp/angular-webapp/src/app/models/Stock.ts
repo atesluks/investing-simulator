@@ -8,7 +8,7 @@ export class Stock{
   dailyChangePercents: string;
   exchange: string;
   lastUpdated: string;
-  stockTimeSeries: StockTimeSeries[];
+  timeSeries: StockTimeSeries[];
 
 
   constructor(companyName: string, price: string) {

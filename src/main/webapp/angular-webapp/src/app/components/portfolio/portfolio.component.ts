@@ -87,15 +87,15 @@ export class PortfolioComponent implements OnInit {
           this.openDeals = this.openDeals.sort((t1, t2) => {
             const name1 = t1.id
             const name2 = t2.id;
-            if (name1 > name2) { return 1; }
-            if (name1 < name2) { return -1; }
+            if (name1 > name2) { return -1; }
+            if (name1 < name2) { return 1; }
             return 0;
           });
           this.closedDeals = this.closedDeals.sort((t1, t2) => {
             const name1 = t1.id
             const name2 = t2.id;
-            if (name1 > name2) { return 1; }
-            if (name1 < name2) { return -1; }
+            if (name1 > name2) { return -1; }
+            if (name1 < name2) { return 1; }
             return 0;
           });
         }

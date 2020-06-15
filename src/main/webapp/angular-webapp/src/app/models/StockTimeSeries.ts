@@ -1,13 +1,13 @@
 export class StockTimeSeries{
-  private date: number;
-  private open: number;
-  private high: number;
-  private low: number;
-  private close: number;
-  private volume: number;
+  private date: string;
+  private open: string;
+  private high: string;
+  private low: string;
+  private close: string;
+  private volume: string;
 
 
-  constructor(date: number, open: number, high: number, low: number, close: number, volume: number) {
+  constructor(date: string, open: string, high: string, low: string, close: string, volume: string) {
     this.date = date;
     this.open = open;
     this.high = high;
