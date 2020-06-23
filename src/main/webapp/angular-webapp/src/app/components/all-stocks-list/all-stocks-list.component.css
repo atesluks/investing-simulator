@@ -1,0 +1,99 @@
+.positive {
+  color: green;
+  font-weight: bold;
+}
+
+.negative {
+  color: red;
+  font-weight: bold;
+}
+
+.neutral {
+  color: black;
+  font-weight: bold;
+}
+
+.price {
+  font-weight: bold;
+}
+
+.scroll{
+  overflow-y: scroll;
+  height:500px;
+  width: auto;
+  overflow-x: hidden;
+  overflow-x: hidden;
+}
+
+.list-active{
+  background: #494B68;
+}
+
+.list-regular{
+  background: #ffffff;
+}
+
+.title{
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.text{
+  color: #000000;
+  font-weight: bold;
+}
+
+.center {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vertical-center {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.chart-btn {
+  background-color: DodgerBlue; /* Blue background */
+  border: none; /* Remove borders */
+  color: white; /* White text */
+  font-size: 16px; /* Set a font size */
+  cursor: pointer; /* Mouse pointer on hover */
+  padding-left: 20px;
+}
+
+/* Darker background on mouse-over */
+.chart-btn:hover {
+  background-color: RoyalBlue;
+}
+
+.border{
+  border: 3px solid #73AD21;
+}
+
+.center-right{
+  float: right;
+}

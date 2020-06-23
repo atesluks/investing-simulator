@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {UserService} from "../../../services/user.service";
 import {User} from "../../../models/User";
-import {Cookie} from "ng2-cookies/ng2-cookies";
 import {Portfolio} from "../../../models/Portfolio";
 import {Router} from "@angular/router";
+import {CookieService} from "ngx-cookie-service";
 
 @Component({
   selector: 'app-portfolio-list',
@@ -12,23 +12,29 @@ import {Router} from "@angular/router";
 })
 export class PortfolioListComponent implements OnInit {
 
-  private theUser: User;
-  private allPortfolios;
-  private createPortfolioAlertText;
-  private createPortfolioAlertHideShow;
-  private createPortfolioAlertType;
-  private spinnerFadeShow;
-  private portfolioToDelete: Portfolio;
+  public theUser: User;
+  public allPortfolios: Array<Portfolio>;
+  public createPortfolioAlertText;
+  public createPortfolioAlertHideShow;
+  public createPortfolioAlertType;
+  public spinnerFadeShow;
+  public portfolioToDelete: Portfolio;
 
   constructor(private userService: UserService,
-              private router: Router) { }
+              private router: Router,
+              private cookies: CookieService) { }
 
   ngOnInit() {
-    this.theUser = JSON.parse(Cookie.get('user'));
 
-    if (this.theUser == undefined) {
+    let userCookies = this.cookies.get('/user');
+
+    if (userCookies==""){
       this.router.navigate(['/login']);
+      return;
     }
+
+    this.theUser = JSON.parse(userCookies);
+
     this.updateUser(this.theUser.id);
 
     this.createPortfolioAlertHideShow = "fade";
@@ -96,18 +102,15 @@ export class PortfolioListComponent implements OnInit {
   updateUser(id: number){
     this.userService.getUser(id).subscribe((result: User) => {
       if (result==undefined){
-        Cookie.set('user',undefined);
+        this.cookies.set('/user',"");
         this.router.navigate(['/login']);
       }else{
-        Cookie.set('user',JSON.stringify(result));
+        this.cookies.set('/user',JSON.stringify(result));
         this.theUser = result;
         this.getPortfolios();
 
-        console.log("PortfolioList. Updating user. Updated, putted in cookies. Cookies:");
-        console.log(JSON.parse(Cookie.get('user')));
-
         this.spinnerFadeShow = 'fade';
-        //closing the modal windows if opened
+        //closing the modal windows if they are opened
         document.getElementById("closeModalButton").click();
         document.getElementById("closeDeleteModal").click();
       }
@@ -129,6 +132,25 @@ export class PortfolioListComponent implements OnInit {
     this.spinnerFadeShow="fade";
     this.createPortfolioAlertHideShow="fade";
     document.getElementById("closeModalButton").click();
+  }
+
+  public roundNumbers(num: number){
+    return Math.round((num + Number.EPSILON) * 100) / 100;
+  }
+
+  public goToPortfolio(portfolioId: number){
+    this.router.navigate(['/portfolio/'+portfolioId]);
+  }
+
+  public formatNumbers(num: number) {
+    let result = num + '';
+    if (result.indexOf('.') == -1) {
+      result = result + '.00';
+    } else if (result.charAt(result.length - 2) == '.') {
+      result = result + '0';
+    }
+    result = result.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return result;
   }
 
 }

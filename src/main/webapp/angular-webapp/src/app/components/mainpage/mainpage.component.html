@@ -1,17 +1,33 @@
-<br>
-<br>
-
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
 <div class="container">
+
+<app-header></app-header>
+
+  <br>
+
   <div class="row">
-    <div class="col">
+
+
+    <div class="col-3">
       <app-portfolio-list></app-portfolio-list>
     </div>
-    <div class="col">
-
+    <div class="col-6">
+      <app-graph></app-graph>
     </div>
-    <div class="col">
-      <app-all-stocks-list></app-all-stocks-list>
+    <div class="col-3">
+      <app-all-stocks-list
+        (showStockOnChartEvent)="showStockOnChart($event)"
+      ></app-all-stocks-list>
     </div>
   </div>
+
+  <br>
+  <br>
+
+  <app-footer></app-footer>
+
 </div>
+
+
 

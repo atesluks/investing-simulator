@@ -1,5 +1,8 @@
 package com.atesliuk.investing_simulator.controller.exceptions;
 
+/**
+ * A custom exception
+ */
 public class EntityNotFoundException extends RuntimeException {
 
     public EntityNotFoundException(String message) {

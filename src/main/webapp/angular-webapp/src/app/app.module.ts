@@ -15,6 +15,13 @@ import {FormsModule} from "@angular/forms";
 import {FinancialsService} from "./services/financials.service";
 import { PortfolioComponent } from './components/portfolio/portfolio.component';
 
+import { ChartModule, StockChartAllModule, ChartAllModule } from '@syncfusion/ej2-angular-charts';
+import { DateTimeService, CategoryService, LegendService, CandleSeriesService, TooltipService, RangeTooltipService, PeriodSelectorService} from '@syncfusion/ej2-angular-charts';
+import {GraphComponent} from "./components/graph/graph.component";
+import {CookieService} from "ngx-cookie-service";
+import { HeaderComponent } from './components/header/header.component';
+import { FooterComponent } from './components/footer/footer.component';
+
 const appRoutes: Routes = [
   {path:'', component:MainpageComponent},
   {path:'login', component:LoginComponent},
@@ -30,18 +37,32 @@ const appRoutes: Routes = [
     MainpageComponent,
     PortfolioListComponent,
     AllStocksListComponent,
-    PortfolioComponent
+    PortfolioComponent,
+    GraphComponent,
+    HeaderComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     RouterModule.forRoot(appRoutes),
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    ChartModule,
+    StockChartAllModule,
+    ChartAllModule
   ],
   providers: [
     UserService,
-    FinancialsService],
+    FinancialsService,
+    CategoryService,
+    LegendService,
+    CandleSeriesService,
+    CookieService,
+    TooltipService,
+    RangeTooltipService,
+    PeriodSelectorService,
+    DateTimeService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

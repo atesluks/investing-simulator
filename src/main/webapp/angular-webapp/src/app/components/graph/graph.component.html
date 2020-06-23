@@ -1,0 +1,13 @@
+<li class="list-group-item list-active title center" style="border-radius: 3px 3px 0px 0px;">{{title}}</li>
+
+<ejs-stockchart id="chart-container" [crosshair]='crosshair' [tooltip]='tooltip'>
+
+  <e-stockchart-series-collection>
+    <e-stockchart-series [dataSource]='stockchartData' type='Candle' xName='date' High='high' Low='low' Open='open'
+                         Close='close' Name='Stock'
+    ></e-stockchart-series>
+  </e-stockchart-series-collection>
+
+</ejs-stockchart>
+
+

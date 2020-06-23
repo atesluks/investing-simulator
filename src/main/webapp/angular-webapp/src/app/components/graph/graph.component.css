@@ -1,0 +1,19 @@
+.web-chart{
+  height:500px;
+}
+
+.center {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.title{
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.list-active{
+  background: #494B68;
+}

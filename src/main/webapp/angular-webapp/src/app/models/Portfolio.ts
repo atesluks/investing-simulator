@@ -16,4 +16,5 @@ export class Portfolio{
     this.initialInvestment = initialInvestment;
     this.user_referenced_id = user_referenced_id;
   }
+
 }

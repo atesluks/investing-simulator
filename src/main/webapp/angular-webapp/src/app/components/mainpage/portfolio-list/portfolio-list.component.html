@@ -1,17 +1,57 @@
-<div class="list-group">
-  <a href="#" class="list-group-item list-group-item-action active">
-    Portfolios
-    <button type="button" class="btn btn-light" data-toggle="modal" data-target="#addPortfolioModal">
-      New portfolio
-    </button>
-  </a>
-  <div *ngFor="let portfolio of allPortfolios">
-    <a href="/portfolio/{{portfolio.id}}" class="list-group-item list-group-item-action">{{portfolio.name}} | {{portfolio.current_portfolio_value}} </a>
-    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deletePortfolioModal"
-            (click)="setPortfolioToDelete(portfolio)"> Delete
-    </button>
+<ul class="list-group">
+  <li class="list-group-item list-active list-group-item-action title">
+    <div class="row">
+      <div class="col-sm-9">
+        Portfolios
+      </div>
+
+      <div class="col-sm-3">
+        <i type="button" class="material-icons md-15 btn btn-sm btn-outline-light" data-toggle="modal"
+           data-target="#addPortfolioModal">add</i>
+      </div>
+
+    </div>
+  </li>
+
+  <div [ngClass]="{
+    'scroll' : allPortfolios.length>7,
+    '' : allPortfolios.length<=7
+  }" *ngIf="allPortfolios.length>0">
+    <div *ngFor="let portfolio of allPortfolios">
+
+      <li class="list-group-item list-group-item-action">
+        <div class="row" type="button">
+
+          <div class="col-md-12 text" (click)="goToPortfolio(portfolio.id)">
+            {{portfolio.name}}
+          </div>
+        </div>
+
+        <div class="row" type="button">
+          <div class="col-md-5" (click)="goToPortfolio(portfolio.id)">
+            ${{formatNumbers(roundNumbers(portfolio.current_portfolio_value))}}
+          </div>
+
+          <div class="col-md-4 center" [ngClass]="{
+              'positive' : roundNumbers((portfolio.current_portfolio_value / portfolio.initialInvestment - 1) * 100)>0,
+              'negative' : roundNumbers((portfolio.current_portfolio_value / portfolio.initialInvestment - 1) * 100)<0}">
+            <b>{{roundNumbers((portfolio.current_portfolio_value / portfolio.initialInvestment - 1) * 100)}}%</b>
+          </div>
+
+          <div class="col-md-3">
+              <span type="button"  class="btn btn-sm btn-danger material-icons md-20 center" style="width:30px;height:25px;"
+                    data-toggle="modal" data-target="#deletePortfolioModal" (click)="setPortfolioToDelete(portfolio)"> delete </span>
+          </div>
+        </div>
+      </li>
+
+
+    </div>
   </div>
-</div>
+  <div class="row" *ngIf="allPortfolios.length==0">
+    <p><i>There are no portfolios yet. Create one by pressing 'add' button above. </i></p>
+  </div>
+</ul>
 
 <!-- Add portfolio Modal -->
 <div class="modal fade" id="addPortfolioModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -24,7 +64,8 @@
 
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">Create new portfolio</h5>
-          <button type="button" class="close" data-dismiss="modal" id="closeModalButton" aria-label="Close" (click)="onModalClosed()">
+          <button type="button" class="close" data-dismiss="modal" id="closeModalButton" aria-label="Close"
+                  (click)="onModalClosed()">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>

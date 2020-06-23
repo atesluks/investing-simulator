@@ -8,39 +8,39 @@
 
     <div class="col-5">
 
-      <h3>Sign up</h3>
+      <h3 class="title">Sign up</h3>
 
       <br>
 
       <div class="alert {{this.alertType}} alert-dismissible collapse {{this.alertFadeShow}}" role="alert">
         {{this.alertText}}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="this.hideAlert()">
+        <button type="button" class="close" aria-label="Close" (click)="this.hideAlert()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
 
       <form ngNativeValidate (submit)="onSignup($event, email.value, firstName.value, lastName.value, password.value, repeatPassword.value)">
         <div class="form-group">
-          <label for="inputEmail">Email address</label>
+          <label for="inputEmail" class="text">Email address</label>
           <input type="email" #email class="form-control" id="inputEmail" aria-describedby="emailHelp" required data-bv-notempty-message="The email is required">
           <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else</small>
         </div>
         <div class="form-group">
-          <label for="inputFirstName">First name</label>
+          <label for="inputFirstName" class="text">First name</label>
           <input type="text" #firstName class="form-control" id="inputFirstName" required data-bv-notempty-message="The first name is required">
         </div>
         <div class="form-group">
-          <label for="inputLastName">Last name</label>
+          <label for="inputLastName" class="text">Last name</label>
           <input type="text" #lastName class="form-control" id="inputLastName" required data-bv-notempty-message="The last name is required">
         </div>
         <div class="form-group">
-          <label for="inputPassword">Password</label>
+          <label for="inputPassword" class="text">Password</label>
           <input type="password" #password class="form-control" id="inputPassword"
                  required data-bv-notempty-message="The password is required" aria-describedby="passwordHelp">
           <small id="passwordHelp" class="form-text text-muted">Make sure your password is 6-20 symbols long</small>
         </div>
         <div class="form-group">
-          <label for="inputRepeatPassword">Repeat password</label>
+          <label for="inputRepeatPassword" class="text">Repeat password</label>
           <input type="password" #repeatPassword class="form-control" id="inputRepeatPassword"
                  required data-bv-notempty-message="The password is required">
         </div>
@@ -56,7 +56,7 @@
             </div>
           </div>
           <div class="col-3">
-            <button type="submit" class="btn btn-secondary" routerLink="/login">Login</button>
+            <a href="/login" class="stretched-link text">Login</a>
           </div>
         </div>
 

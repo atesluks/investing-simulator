@@ -1,5 +1,8 @@
 package com.atesliuk.investing_simulator.controller.exceptions;
 
+/**
+ * A class that generates custom response messages
+ */
 public class EntityErrorResponse {
 
     private int status;

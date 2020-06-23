@@ -1,0 +1,91 @@
+.scroll{
+  overflow-y: scroll;
+  height:400px;
+  width: auto;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.add-btn {
+  background-color: DodgerBlue; /* Blue background */
+  border: none; /* Remove borders */
+  color: white; /* White text */
+  font-size: 16px; /* Set a font size */
+  cursor: pointer; /* Mouse pointer on hover */
+  padding-left: 20px;
+}
+
+/* Darker background on mouse-over */
+.add-btn:hover {
+  background-color: RoyalBlue;
+}
+
+.list-active{
+  background: #494B68;
+}
+
+.title{
+  color: #ffffff;
+}
+
+center {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.material-icons.md-15 { font-size: 15px; }
+.material-icons.md-20 { font-size: 20px; }
+
+.text{
+  color: #000000;
+  font-weight: bold;
+}
+.positive {
+  color: green;
+  font-weight: bold;
+}
+.positive-light {
+  color: greenyellow;
+  font-weight: bold;
+}
+
+.negative {
+   color: red;
+   font-weight: bold;
+ }
+
+.negative-light {
+  color: #ff5959;
+  font-weight: bold;
+}
+
+.neutral {
+  color: black;
+  font-weight: bold;
+}
+
+.center {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

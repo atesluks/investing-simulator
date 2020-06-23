@@ -4,14 +4,14 @@ export class Stock{
 
   companyName: string;
   symbol: string;
-  price: string;
+  price: number;
   dailyChangePercents: string;
   exchange: string;
   lastUpdated: string;
   timeSeries: StockTimeSeries[];
 
 
-  constructor(companyName: string, price: string) {
+  constructor(companyName: string, price: number) {
     this.companyName = companyName;
     this.price = price;
   }

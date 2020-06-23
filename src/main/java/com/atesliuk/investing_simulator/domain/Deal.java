@@ -5,38 +5,67 @@ import com.fasterxml.jackson.annotation.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * Entity class of a Deal object. The class stores information about
+ * Deals (stocks bought and sold within a portfolio)
+ */
 @Entity
 @Table(name = "deal")
 public class Deal implements Comparable{
 
+    /**
+     * Id of a deal as it is stored in the database
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
+    /**
+     * Symbol of a stock
+     */
     @Column(name = "stock_symbol")
     private String stockSymbol;
 
+    /**
+     * Number of stocks bought
+     */
     @Column(name = "amount")
     private Integer amount;
 
+    /**
+     * Date when the stocks were bought
+     */
     @Column(name = "open_date")
     private LocalDateTime openDate;
 
+    /**
+     * Date when the stocks were sold
+     */
     @Column(name = "closing_date")
     private LocalDateTime closingDate;
 
+    /**
+     * Price at which the stocks were bought  (per one stock)
+     */
     @Column(name = "open_price")
     private Double openPrice;
 
+    /**
+     * Price per which the stocks were sold (per stock)
+     */
     @Column(name = "closing_price")
     private Double closingPrice;
 
-    //this variable helps when making a POST request for saving a deal to reference a portfolio
+    //This variable helps when making a POST request for saving a deal to reference a portfolio
+    //The variable is not included in the MySQL data table
     @Transient
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Long portfolio_referenced_id;
 
+    /**
+     * Portfolio in which the deal was made
+     */
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH,
@@ -44,9 +73,22 @@ public class Deal implements Comparable{
     @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio;
 
+    /**
+     * Empty constructor
+     */
     public Deal() {
     }
 
+    /**
+     * Constructor with some of the variables assigned
+     * @param stockSymbol - stock symbol
+     * @param amount - number of stocks bought
+     * @param openDate - date when the stocks were bought (the position was opened)
+     * @param closingDate - date when the stocks were closed (the position was closed)
+     * @param openPrice - price for which stocks were bought (per stock)
+     * @param closingPrice - price for which stocks were sold (per stock)
+     * @param portfolio - portfolio in which the deal was made
+     */
     public Deal(String stockSymbol, Integer amount, LocalDateTime openDate, LocalDateTime closingDate, Double openPrice, Double closingPrice, Portfolio portfolio) {
         this.stockSymbol = stockSymbol;
         this.amount = amount;
@@ -56,6 +98,8 @@ public class Deal implements Comparable{
         this.closingPrice = closingPrice;
         this.portfolio = portfolio;
     }
+
+    //Getters and setters
 
     public Long getId() {
         return id;
@@ -121,16 +165,20 @@ public class Deal implements Comparable{
         this.portfolio = portfolio;
     }
 
+    // portfolio_reference_id variable is not included in the JSON object when
+    // this Deal object is retrieved vie HTTP request
     @JsonIgnore
     public Long getPortfolio_referenced_id() {
         return portfolio_referenced_id;
     }
 
+    // value of portfolio_reference_id variable is not assigned when HTTP POST request is done
     @JsonIgnore
     public void setPortfolio_referenced_id(Long portfolio_referenced_id) {
         this.portfolio_referenced_id = portfolio_referenced_id;
     }
 
+    // Overriden compareTo() method when comparing deals. Deals are compared by opening and closing date
     @Override
     public int compareTo(Object o) {
         if (o instanceof Deal){

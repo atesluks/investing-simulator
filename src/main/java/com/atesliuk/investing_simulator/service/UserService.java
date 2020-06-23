@@ -2,6 +2,9 @@ package com.atesliuk.investing_simulator.service;
 
 import com.atesliuk.investing_simulator.domain.User;
 
+/**
+ * Interface for User Service
+ */
 public interface UserService {
 
     Iterable<User> getAllUsers();

@@ -3,48 +3,65 @@ package com.atesliuk.investing_simulator.domain;
 import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Entity class of a User object. The class stores information about
+ * Users
+ */
 @Entity
 @Table(name = "users")
 public class User {
 
+    //User's id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
+    //User's email
     @Column(name = "email")
     private String email;
 
+    //User's first name
     @Column(name = "first_name")
     private String firstName;
 
+    //User's last name
     @Column(name = "last_name")
     private String lastName;
 
+    //USer's password (can be written only, can't be read (providedin JSON object) for security reasons)
     @Column(name = "password")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
+    //List of portfolios associated with this user (ony portfolio ids are provided in JSON object)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.DETACH,
             CascadeType.MERGE, CascadeType.REFRESH})
     private List<Portfolio> portfolios;
 
-    public User(String email, String firstName, String lastName, String password, List<Portfolio> portfolios) {
+    //Empty constructor
+    public User(){
+    }
+
+    /**
+     * Constructor that assigns values to some of the fields
+     * @param email - User's email
+     * @param firstName - User's first name
+     * @param lastName - User's last name
+     * @param password - User's password
+     */
+    public User(String email, String firstName, String lastName, String password) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
-        this.portfolios = portfolios;
     }
 
-    public User(){
-
-    }
+    //Getters and setters
 
     public void setId(Long id) {
         this.id = id;
@@ -95,6 +112,7 @@ public class User {
         this.portfolios = portfolios;
     }
 
+    //Overriden toString() method for debugging
     @Override
     public String toString() {
         return "User{" +
@@ -104,15 +122,6 @@ public class User {
                 ", lastName='" + lastName + '\'' +
                 ", password='" + password + '\'' +
                 '}';
-    }
-
-    public void addPortfolio(Portfolio portfolio){
-        if (portfolios==null) throw new NullPointerException("Portfolio can't be null in Customer.addPortfolio() !");
-        if (portfolios == null){
-            portfolios = new ArrayList<>();
-        }
-        portfolios.add(portfolio);
-        portfolio.setUser(this) ;
     }
 
 }

@@ -15,19 +15,19 @@ export class AllStocksListComponent implements OnInit {
 
   @Output() buyStockEvent = new EventEmitter();
   @Output() getAllStocksEvent = new EventEmitter();
+  @Output() showStockOnChartEvent = new EventEmitter();
   @Input() thePortfolio: Portfolio;
 
   public allStocks: Map<String, Stock>;
-  private showBuySellButtons: string;
-  private buttonDisabled: string;
-  private portfolioId: number;
-  private selectedStock: Stock;
+  public showBuySellButtons: boolean;
+  public portfolioId: number;
+  public selectedStock: Stock;
 
   //alert and spinners in modal
-  private alertType: string;
-  private alertText: string;
-  private alertHideShow: string;
-  private spinnerFadeShow: string;
+  public alertType: string;
+  public alertText: string;
+  public alertHideShow: string;
+  public spinnerFadeShow: string;
 
   constructor(private _route: ActivatedRoute,
               private financialsService: FinancialsService,
@@ -37,20 +37,18 @@ export class AllStocksListComponent implements OnInit {
   ngOnInit() {
     //set default values
     this.allStocks = new Map<String, Stock>();
-    this.showBuySellButtons = "fade";
-    this.buttonDisabled = "disabled";
+    this.showBuySellButtons = false;
     this.alertType = "alert-danger";
     this.alertHideShow = "fade";
     this.spinnerFadeShow = "fade";
     this.portfolioId = 0;
-    this.selectedStock = new Stock("", "");
+    this.selectedStock = new Stock("", 0);
 
     //if this component is inside portfolio-component, then we
     //retrieve information about the portfolio
     this.portfolioId = +this._route.snapshot.paramMap.get('id');
     if (this.portfolioId > 0) {
-      this.showBuySellButtons = "show";
-      this.buttonDisabled = "";
+      this.showBuySellButtons = true;
     }
 
     this.getAllStocks();
@@ -89,19 +87,13 @@ export class AllStocksListComponent implements OnInit {
         stock = result[value];
         let stockPrice = "" + stock.price;
 
-        if (stockPrice != 'null') {
-          if (stockPrice.indexOf('.') == -1) {
-            stock.price = stock.price + '.00';
-          } else if (stockPrice.charAt(stockPrice.length - 2) == '.') {
-            stock.price = stockPrice + '0';
-          }
-        }
 
         map.set(value, stock);
       }
 
       this.allStocks = map;
       this.getAllStocksEvent.emit({stocks: map});
+      this.showStockOnChart(map.entries().next().value[1]);
     });
   }
 
@@ -126,8 +118,27 @@ export class AllStocksListComponent implements OnInit {
         this.buyStockEvent.emit({theDeal: newDeal});
         this.onModalClosed();
       }
-
     });
+  }
+
+  public showStockOnChart(stock: Stock) {
+    this.showStockOnChartEvent.emit({stock: stock});
+  }
+
+  public roundNumbers(num: any) {
+    let theNum = +num;
+    return Math.round((theNum + Number.EPSILON) * 100) / 100;
+  }
+
+  public formatNumbers(num: number) {
+    let result = num + '';
+    if (result.indexOf('.') == -1) {
+      result = result + '.00';
+    } else if (result.charAt(result.length - 2) == '.') {
+      result = result + '0';
+    }
+    result = result.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return result;
   }
 
 }

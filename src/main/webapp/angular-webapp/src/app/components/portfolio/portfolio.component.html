@@ -1,16 +1,55 @@
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="#">Home</a></li>
-    <li class="breadcrumb-item active" aria-current="page">{{thePortfolio.name}}</li>
-  </ol>
-</nav>
-
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
 <div class="container">
+
+  <app-header></app-header>
+
+  <br>
+
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="#">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{thePortfolio.name}}</li>
+    </ol>
+  </nav>
+
   <div class="row">
     <div class="col-8">
-      <nav class="navbar navbar-dark bg-dark">
-        <span *ngIf="thePortfolio.name!=''" class="navbar-brand mb-0 h1">{{thePortfolio.name}} | current value: {{thePortfolio.current_portfolio_value}}
-          | Cash: {{thePortfolio.cash}} | Returns: {{(thePortfolio.current_portfolio_value/thePortfolio.initialInvestment - 1)*100}}%</span>
+      <nav class="navbar navbar-dark list-active title" style="border-radius: 3px;">
+        <div class="col-4">
+          <h5><b>{{thePortfolio.name}}</b></h5>
+        </div>
+
+        <div class="col-3">
+          <span class="center"><b>Portfolio value:</b></span>
+          <div class="center">
+            <div>
+              ${{formatNumbers(roundNumbers(thePortfolio.current_portfolio_value))}}
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-3">
+          <span class="center"><b>Cash:</b></span>
+          <div class="center">
+            <div>
+              ${{formatNumbers(thePortfolio.cash)}}
+            </div>
+          </div>
+        </div>
+
+        <div class="col-2">
+          <span class="center"><b>Returns:</b></span>
+          <div class="center" [ngClass]="{
+                    'positive-light' : thePortfolio.current_portfolio_value>thePortfolio.initialInvestment,
+                    'negative-light' : thePortfolio.current_portfolio_value<thePortfolio.initialInvestment}">
+            <div>
+
+              {{roundNumbers((thePortfolio.current_portfolio_value / thePortfolio.initialInvestment - 1) * 100)}}%
+            </div>
+          </div>
+        </div>
       </nav>
 
       <br>
@@ -25,68 +64,174 @@
       </div>
 
       <br>
-      <h6> *Here will be graph* </h6>
+
+      <app-graph></app-graph>
+
       <br>
 
       <ul *ngIf="openDeals.length>0" class="list-group">
-        <li class="list-group-item active">Assets</li>
-        <div *ngFor="let deal of this.openDeals.values()">
-          <li class="list-group-item"> {{deal.stockSymbol}} x {{deal.amount}}
-            <button type="button" class="btn btn-danger" (click)="this.selectedDeal=deal" data-toggle="modal"
-                    data-target="#sellStockModal">SELL
-            </button>
-          </li>
+
+        <li class="list-group-item list-active list-group-item-action title"><b>Assets</b></li>
+
+        <div [ngClass]="{
+        'scroll' : this.openDeals.length>5,
+        '' : this.openDeals.length<=5
+        }" *ngIf="this.openDeals.length>0">
+
+
+          <div *ngFor="let deal of this.openDeals.values()">
+            <li class="list-group-item">
+
+              <div class="row">
+                <div class="col-1 center">
+                  <h5>{{roundNumbers(deal.amount)}}x</h5>
+                </div>
+
+                <div class="col-7">
+                  <div class="row-cols-sm-1">
+                    <b>{{deal.stockSymbol}}</b> ({{this.allStocks.get(deal.stockSymbol).companyName}})
+                  </div>
+                  <div class="row-cols-sm-1">
+                    <i><small>Bought {{formatTime(deal.openDate)}} for <b>${{formatNumbers(deal.openPrice)}}</b> per stock
+                      ( <b>${{formatNumbers(roundNumbers(deal.openPrice * deal.amount))}}</b> total )</small></i>
+                  </div>
+                </div>
+
+                <div class="col-md-2">
+                  <div class="center">
+                    ${{formatNumbers(roundNumbers(deal.amount * this.allStocks.get(deal.stockSymbol).price))}}
+                  </div>
+                  <div class="center" [ngClass]="{
+                    'positive' : (this.allStocks.get(deal.stockSymbol).price - deal.openPrice)>0,
+                    'negative' : (this.allStocks.get(deal.stockSymbol).price - deal.openPrice)<0}">
+                    <div>
+                      <b>{{roundNumbers((this.allStocks.get(deal.stockSymbol).price - deal.openPrice) / deal.openPrice * 100)}}
+                        %</b>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="col-2 center">
+                  <button type="button" class="btn btn-danger" (click)="this.selectedDeal=deal" data-toggle="modal"
+                          data-target="#sellStockModal">SELL
+                  </button>
+                </div>
+
+              </div>
+            </li>
+          </div>
         </div>
       </ul>
+
+      <!-- If there are no opened deals-->
       <ul *ngIf="openDeals.length==0" class="list-group">
-        <li class="list-group-item active">Assets</li>
+        <li class="list-group-item list-active list-group-item-action title">Assets</li>
         <li class="list-group-item"> No bought stocks yet</li>
       </ul>
 
       <br>
+      <br>
 
       <ul class="list-group">
         <ul *ngIf="closedDeals.length>0" class="list-group">
-          <li class="list-group-item active">Closed deals</li>
-          <div *ngFor="let deal of this.closedDeals.values()">
-            <li class="list-group-item"> {{deal.stockSymbol}} x {{deal.amount}} | opened: {{deal.openDate}} | closed: {{deal.closingDate}}
-              | bought @ {{deal.openPrice}} | sold @ {{deal.closingPrice}} | profit: {{deal.amount * (deal.closingPrice - deal.openPrice)}}
-            </li>
+          <li class="list-group-item list-active list-group-item-action title"><b>Closed deals</b></li>
+
+          <div [ngClass]="{
+            'scroll' : this.closedDeals.length>5,
+            '' : this.openDeals.length<=5
+            }" *ngIf="this.closedDeals.length>0">
+
+            <div *ngFor="let deal of this.closedDeals.values()">
+              <li class="list-group-item">
+                <div class="row">
+
+                  <div class="col-1 center">
+                    <h5>{{roundNumbers(deal.amount)}}x</h5>
+                  </div>
+
+                  <div class="col-8">
+                    <div class="row-cols-sm-1">
+                      <b>{{deal.stockSymbol}}</b> ({{this.allStocks.get(deal.stockSymbol).companyName}})
+                    </div>
+                    <div class="row-cols-sm-1">
+                      <i><small>Bought {{formatTime(deal.openDate)}} for <b>${{formatNumbers(deal.openPrice)}}</b> per stock
+                        ( <b>${{formatNumbers(roundNumbers(deal.openPrice * deal.amount))}}</b> total )</small></i>
+                    </div>
+                    <div class="row-cols-sm-1">
+                      <i><small>Sold {{formatTime(deal.closingDate)}} for <b>${{formatNumbers(deal.closingPrice)}}</b> per stock
+                        ( <b>${{formatNumbers(roundNumbers(deal.closingPrice * deal.amount))}}</b> total )</small></i>
+                    </div>
+                  </div>
+
+                  <div class="col-3">
+                    <div class="center">
+                      <b>Profit:</b>
+                    </div>
+                    <div class="center">
+                      {{calculateClosedProfit(deal)}}
+                    </div>
+                    <div class="center" [ngClass]="{
+                    'positive' : deal.openPrice<deal.closingPrice,
+                    'negative' : deal.openPrice>deal.closingPrice}">
+                      <div>
+                        <b>{{calcualteClsoedProfitPercents(deal)}}</b>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </li>
+            </div>
+
           </div>
+
         </ul>
+
+        <!-- If there are no closed deals yet-->
         <ul *ngIf="closedDeals.length==0" class="list-group">
-          <li class="list-group-item active">Closed deals</li>
-            <li class="list-group-item"> No closed deals yet</li>
+          <li class="list-group-item list-active list-group-item-action title">Closed deals</li>
+          <li class="list-group-item"> No closed deals yet</li>
         </ul>
       </ul>
 
+      <br>
+      <br>
     </div>
+
+
     <div class="col-4">
       <app-all-stocks-list
         (buyStockEvent)="buyStockEventHandler($event)"
         (getAllStocksEvent)="getAllStocks($event)"
         [thePortfolio]="thePortfolio"
+        (showStockOnChartEvent)="showStockOnChart($event)"
       ></app-all-stocks-list>
     </div>
   </div>
+
+  <app-footer></app-footer>
+
 </div>
 
+
 <!-- Sell Stock Modal -->
-<div *ngIf="selectedDeal.stockSymbol!='' && allStocks.size>0" class="modal fade" id="sellStockModal" tabindex="-1" role="dialog"
+<div *ngIf="selectedDeal.stockSymbol!='' && allStocks.size>0" class="modal fade" id="sellStockModal" tabindex="-1"
+     role="dialog"
      aria-labelledby="exampleModalLabel"
      aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel2">Sell {{this.selectedDeal.stockSymbol}} stocks?</h5>
+      <div class="modal-header list-active title">
+        <h5 class="modal-title" id="exampleModalLabel2"> <b>Sell {{this.selectedDeal.stockSymbol}} stocks?</b></h5>
         <button type="button" class="close" data-dismiss="modal" id="closeModal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+          <span class="center title" aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
         <p>You have {{selectedDeal.amount}} {{selectedDeal.stockSymbol}} stock(s). </p>
-        <p>Do you want to sell them for ${{allStocks.get(selectedDeal.stockSymbol).price}} each?</p>
-        <p>Profit: {{selectedDeal.amount * (allStocks.get(selectedDeal.stockSymbol).price - selectedDeal.openPrice)}}</p>
+        <p>Do you want to sell them for ${{roundNumbers(allStocks.get(selectedDeal.stockSymbol).price)}} each?</p>
+        <p>Total profit: {{this.calculateProfit()}}</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>

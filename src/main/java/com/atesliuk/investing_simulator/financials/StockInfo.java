@@ -4,20 +4,32 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * POJO class, stores information about a stock
+ */
 public class StockInfo {
 
+    //Full name of a company
     private String companyName;
+    //Symbol of a company's stock
     private String symbol;
+    //Current price of a company's stock
     private Double price;
+    //Daily change of the stock (in %)
     private String dailyChangePercents;
+    //Name of the exchange where the stocks are traded
     private String exchange;
+    //Date and time when the information about the stock was updated for the last time
     private LocalDateTime lastUpdated;
+    //List that contains time series data on the stock's prices
     private List<StockTimeSeriesData> timeSeries;
 
+    //empty constructor, initializes timeSeries List
     public StockInfo() {
         timeSeries = new ArrayList<>();
     }
 
+    //Constructor with assigned fields
     public StockInfo(String companyName, String symbol, Double price, String dailyChangePercents, String exchange, LocalDateTime lastUpdated) {
         this.companyName = companyName;
         this.symbol = symbol;
@@ -27,6 +39,8 @@ public class StockInfo {
         this.lastUpdated = lastUpdated;
         timeSeries = new ArrayList<>();
     }
+
+    //Getters and setters
 
     public String getCompanyName() {
         return companyName;
@@ -89,6 +103,7 @@ public class StockInfo {
         this.lastUpdated = lastUpdated;
     }
 
+    // Overriden toString() method for debugging
     @Override
     public String toString() {
         return "StockInfo{" +
@@ -101,6 +116,12 @@ public class StockInfo {
                 '}';
     }
 
+    /**
+     * Helper method that round decimal numbers
+     * @param value - number that has to be rounded
+     * @param places - how many digits after come we want to leave
+     * @return - rounded number
+     */
     public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
 
